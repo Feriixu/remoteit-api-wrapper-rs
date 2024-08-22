@@ -1,0 +1,68 @@
+query GetJobs($jobIds: [ID!], $statuses: [JobStatusEnum!]) {
+    login {
+        jobs(ids: $jobIds, statuses: $statuses, size: 1000)
+        {
+            hasMore
+            total
+            last
+            items {
+                id
+                owner {
+                    email
+                }
+                user {
+                    email
+                }
+                created
+                updated
+                # One of the following FAILED,WAITING,RUNNING,SUCCESS,CANCELLED
+                status
+                #tags associated with job
+                tag {
+                    values
+                    operator
+                }
+
+                #ANY/ALL (i.e. or/and)
+                fileVersion {
+                    id
+                    file {
+                        name
+                    }
+                }
+                jobDevices {
+                    id
+                    device {
+                        id
+                    }
+                    #attributes associated with the job.
+                    attributes {
+                        created
+                        id
+                        key
+                        value
+                    }
+                    #one of the following: FAILED,WAITING,RUNNING,SUCCESS,CANCELLED
+                    status
+                }
+                arguments {
+                    id
+                    fileArgument {
+                        id
+                        name
+                        desc
+                        order
+                        options
+                        argumentType
+                        created
+                    }
+                    name
+                    desc
+                    order
+                    argumentType
+                    value
+                }
+            }
+        }
+    }
+}

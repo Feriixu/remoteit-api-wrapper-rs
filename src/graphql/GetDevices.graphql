@@ -1,0 +1,31 @@
+#Gets the list of devices limited to the first 1000
+#hasMore - if there are more devices in the account than requested
+#total - total number of devices based on query filter and account
+#Retrieves details of each devices such as
+#id, online/offline state, lastReported Date
+#which users have accounts
+#tags and attributes associated with each device
+
+query GetDevices($limit: Int, $offset: Int) {
+    login {
+        devices (size: $limit, from: $offset) {
+            hasMore
+            total
+            items {
+                id
+                name
+                state
+                lastReported
+                access {
+                    user {
+                        email
+                    }
+                }
+                tags {
+                    name
+                }
+                attributes
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+query GetFiles {
+    login {
+        files {
+            owner {
+                email
+                id
+            }
+            id
+            name
+            shortDesc
+            longDesc
+            executable
+            created
+            updated
+            versions {
+                items {
+                    id
+                    created
+                    version
+                    arguments {
+                        name
+                        order
+                        options
+                        argumentType
+                    }
+                }
+            }
+        }
+    }
+}

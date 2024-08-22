@@ -1,0 +1,3 @@
+mutation DeleteFileVersion($fileVersionId: String!) {
+    deleteFileVersion(fileVersionId: $fileVersionId)
+}

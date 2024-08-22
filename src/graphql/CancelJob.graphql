@@ -1,0 +1,7 @@
+# Cancel Job requires the job ID and will cancel the job that is in progress but cannot revert any scripts that have already executed.
+# Any currently executing script will no longer update the Remote.It backend for updating attributes or legacy task notifier,
+# but the script will finish running.
+# Any scripts not yet received by devices will be cancelled.
+mutation CancelJob($jobId: String!) {
+    cancelJob(jobId: $jobId)
+}

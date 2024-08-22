@@ -1,0 +1,13 @@
+# Gets the list of Application Types, alternatively know as Service types which can be used it mutations to add services
+# or update services. See https://link.remote.it/docs/api/application-types for further explanation of the properties
+
+query GetApplicationTypes {
+    applicationTypes {
+        id
+        name
+        description
+        port
+        protocol
+        proxy
+    }
+}

@@ -1,0 +1,40 @@
+[package]
+name = "remoteit-api"
+version = "0.1.0"
+edition = "2021"
+authors = ["Feriixu <remoteit-api.9iois@passmail.net>"]
+description = "A wrapper around the Remote.it GraphQL API, also implementing the custom request signing."
+license = "LGPL-3.0-or-later"
+repository = "https://github.com/Feriixu/remoteit-api-wrapper-rs"
+keywords = ["remoteit", "api", "wrapper", "graphql", "client"]
+categories = ["api-bindings"]
+
+[features]
+default = ["full"]
+full = ["credentials_loader", "blocking", "async"]
+credentials_loader = ["dirs", "config"]
+blocking = []
+async = []
+
+[lints.clippy]
+pedantic = "warn"
+cargo = "warn"
+
+[dependencies]
+base64 = "0.22.1"
+chrono = { version = "0.4.38", features = ["serde"] }
+itertools = "0.13.0"
+reqwest = { version = "0.12.5", features = ["blocking", "multipart", "json"] }
+ring = "0.17.8"
+serde = { version = "1.0.208", features = ["derive"] }
+hmac = "0.13.0-pre.4"
+dirs = { version = "5.0.1" , optional = true}
+thiserror = "1.0.63"
+config = { version = "0.14.0", features = ["ini"], optional = true, default-features = false }
+bon = "1.2.1"
+serde_json = "1.0.125"
+graphql_client = "0.14.0"
+
+[dev-dependencies]
+tempfile = "3.12.0"
+tokio = { version = "1.39.3", features = ["full", "test-util"] }
