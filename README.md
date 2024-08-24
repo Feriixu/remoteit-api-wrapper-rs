@@ -1,4 +1,8 @@
-# remoteit-api-wrapper-rs
+# remoteit-api
+
+[![Crates.io](https://img.shields.io/crates/v/remoteit-api)](https://crates.io/crates/remoteit-api)
+[![License](https://img.shields.io/crates/l/remoteit-api)](https://crates.io/crates/remoteit-api)
+[![Docs.rs](https://docs.rs/remoteit-api/badge.svg)](https://docs.rs/remoteit-api)
 
 This is a Rust wrapper for the [Remote.it API](https://docs.remote.it/developer-tools/api).
 
