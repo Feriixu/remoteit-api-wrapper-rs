@@ -1,17 +1,17 @@
-use bon::builder;
 use crate::credentials::Credentials;
+use bon::builder;
 
-#[builder]
-pub struct R3Client {
-    credentials: Credentials,
-}
-
-#[cfg(feature = "blocking")]
-pub mod api_blocking;
 #[cfg(feature = "async")]
 pub mod api_async;
+#[cfg(feature = "blocking")]
+pub mod api_blocking;
+
+// If neither the `async` nor `blocking` features are enabled, then the `auth` module is not needed.
+#[cfg(any(feature = "async", feature = "blocking"))]
 mod auth;
 pub mod credentials;
+#[cfg(feature = "credentials_loader")]
+mod credentials_loader;
 pub mod operations;
 
 /// Base path for the remote.it API.
@@ -22,3 +22,8 @@ pub const GRAPHQL_PATH: &str = "/graphql/v1";
 
 /// Path for file uploads. Append this to [`BASE_URL`] to get the full URL.
 pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
+
+#[builder]
+pub struct R3Client {
+    credentials: Credentials,
+}

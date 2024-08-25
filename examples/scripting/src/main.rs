@@ -4,7 +4,7 @@ use remoteit_api::credentials::Credentials;
 fn main() {
     // See the `load_credentials` example for alternative ways to load credentials.
     let mut credentials = Credentials::load_from_disk().call().unwrap();
-    let profile = credentials.remove("default").unwrap();
+    let profile = credentials.take_profile("default").unwrap().unwrap();
 
     // Create a new client with the loaded credentials.
     let client = R3Client::builder()

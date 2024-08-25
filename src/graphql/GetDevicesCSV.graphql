@@ -1,0 +1,11 @@
+#Gets the csv download link for device list.
+# if you need your organization's list, use the account section
+
+
+query GetDevicesCSV($orgId: String, $withServices: Boolean = false) {
+    login {
+        account(id: $orgId){
+            report(name:"DeviceList", parameters:{services: $withServices})
+        }
+    }
+}

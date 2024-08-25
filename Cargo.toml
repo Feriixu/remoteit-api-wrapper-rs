@@ -12,7 +12,7 @@ categories = ["api-bindings"]
 [features]
 default = []
 full = ["credentials_loader", "blocking", "async"]
-credentials_loader = ["dirs", "config"]
+credentials_loader = ["dep:dirs", "dep:config"]
 blocking = []
 async = []
 

@@ -1,16 +1,18 @@
 use crate::auth::{build_auth_header, get_date};
-use crate::operations::{cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files, get_jobs, org_get_jobs, start_job, CancelJob, DeleteFile, DeleteFileVersion, GetApplicationTypes, GetDevices, GetFiles, GetJobs, OrgGetJobs, StartJob};
+use crate::operations::{
+    cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files,
+    get_jobs, start_job, CancelJob, DeleteFile, DeleteFileVersion, GetApplicationTypes, GetDevices,
+    GetFiles, GetJobs, StartJob,
+};
 use crate::{R3Client, BASE_URL, GRAPHQL_PATH};
 use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
-use bon::{bon};
+use bon::bon;
 use graphql_client::{GraphQLQuery, QueryBody, Response};
 use reqwest::blocking::Client;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::error::Error;
-
-
 
 #[bon]
 impl R3Client {
@@ -55,20 +57,17 @@ impl R3Client {
         self,
         file_id: String,
     ) -> Result<Response<delete_file::ResponseData>, Box<dyn Error>> {
-        let request_body = DeleteFile::build_query(delete_file::Variables {
-            file_id,
-        });
+        let request_body = DeleteFile::build_query(delete_file::Variables { file_id });
         self.send_remoteit_graphql_request(&request_body)
     }
 
     #[builder]
     pub fn delete_file_version(
         self,
-        file_version_id: String
+        file_version_id: String,
     ) -> Result<Response<delete_file_version::ResponseData>, Box<dyn Error>> {
-        let request_body = DeleteFileVersion::build_query(delete_file_version::Variables {
-            file_version_id,
-        });
+        let request_body =
+            DeleteFileVersion::build_query(delete_file_version::Variables { file_version_id });
         self.send_remoteit_graphql_request(&request_body)
     }
 
@@ -77,7 +76,7 @@ impl R3Client {
         self,
         file_id: String,
         device_ids: Vec<String>,
-        arguments: Option<Vec<start_job::ArgumentInput>>
+        arguments: Option<Vec<start_job::ArgumentInput>>,
     ) -> Result<Response<start_job::ResponseData>, Box<dyn Error>> {
         let request_body = StartJob::build_query(start_job::Variables {
             file_id,
@@ -90,56 +89,48 @@ impl R3Client {
     #[builder]
     pub fn cancel_job(
         self,
-        job_id: String
+        job_id: String,
     ) -> Result<Response<cancel_job::ResponseData>, Box<dyn Error>> {
-        let request_body = CancelJob::build_query(cancel_job::Variables {
-            job_id,
-        });
+        let request_body = CancelJob::build_query(cancel_job::Variables { job_id });
         self.send_remoteit_graphql_request(&request_body)
     }
 
     #[builder]
     pub fn get_jobs(
         self,
+        org_id: Option<String>,
         job_id_filter: Option<Vec<String>>,
         status_filter: Option<Vec<get_jobs::JobStatusEnum>>,
     ) -> Result<Response<get_jobs::ResponseData>, Box<dyn Error>> {
         let request_body = GetJobs::build_query(get_jobs::Variables {
+            org_id,
             job_ids: job_id_filter,
             statuses: status_filter,
         });
         self.send_remoteit_graphql_request(&request_body)
     }
 
-    #[builder]
-    pub fn org_get_jobs(
-        self,
-        org_id: String,
-        job_id_filter: Option<Vec<String>>,
-        status_filter: Option<Vec<org_get_jobs::JobStatusEnum>>,
-    ) -> Result<Response<org_get_jobs::ResponseData>, Box<dyn Error>> {
-        let request_body = OrgGetJobs::build_query(org_get_jobs::Variables {
-            org_id: Some(org_id),
-            job_ids: job_id_filter,
-            statuses: status_filter,
-        });
-        self.send_remoteit_graphql_request(&request_body)
-    }
     // endregion
 
     // region Devices and Services
 
     #[builder]
-    pub fn get_application_types(self) -> Result<Response<get_application_types::ResponseData>, Box<dyn Error>> {
+    pub fn get_application_types(
+        self,
+    ) -> Result<Response<get_application_types::ResponseData>, Box<dyn Error>> {
         let request_body = GetApplicationTypes::build_query(get_application_types::Variables {});
         self.send_remoteit_graphql_request(&request_body)
     }
 
     #[builder]
-    pub fn get_devices(self,
+    pub fn get_devices(
+        self,
+        org_id: Option<String>,
         limit: Option<i64>,
-        offset: Option<i64>,) -> Result<Response<get_devices::ResponseData>, Box<dyn Error>> {
+        offset: Option<i64>,
+    ) -> Result<Response<get_devices::ResponseData>, Box<dyn Error>> {
         let request_body = GetDevices::build_query(get_devices::Variables {
+            org_id,
             limit,
             offset,
         });
@@ -152,15 +143,16 @@ impl R3Client {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::PathBuf;
     use crate::credentials::Credentials;
+    use std::path::PathBuf;
 
     fn get_credentials() -> Credentials {
         Credentials::load_from_disk()
             .custom_credentials_path(PathBuf::from(".env.remoteit"))
             .call()
             .unwrap()
-            .remove("default")
+            .take_profile("default")
+            .unwrap()
             .unwrap()
     }
 

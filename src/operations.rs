@@ -54,16 +54,6 @@ pub struct CancelJob;
     response_derives = "Debug"
 )]
 pub struct GetJobs;
-
-
-
-#[derive(GraphQLQuery)]
-#[graphql(
-    schema_path = "src/graphql/schema.json",
-    query_path = "src/graphql/OrgGetJobs.graphql",
-    response_derives = "Debug"
-)]
-pub struct OrgGetJobs;
 // endregion
 
 // region Devices and Services
@@ -83,4 +73,12 @@ pub struct GetApplicationTypes;
     response_derives = "Debug"
 )]
 pub struct GetDevices;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.json",
+    query_path = "src/graphql/GetDevicesCSV.graphql",
+    response_derives = "Debug"
+)]
+pub struct GetDevicesCSV;
 // endregion
