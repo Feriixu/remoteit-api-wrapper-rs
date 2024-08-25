@@ -27,12 +27,12 @@ The developer API is pretty much the same for both versions, so you can switch b
 You can get your credentials here: https://app.remote.it/#/account/accessKey.  
 _Note: You need to have a Remote.it account to get the credentials._
 
-Once you have the credentials, you have two options to provide them to the library:
+Once you have the credentials, you have several options to use them with this crate:
 
 ### Providing credentials using the credentials file as per remote.it spec
 
-:warning: You need to enable the `credentials_loader` feature to use this method.
-You can do this by running `$ cargo add -F credentials_loader`, or editing your `Cargo.toml` to look like this:
+:information_source: _You need to enable the `credentials_loader` feature to use this method.
+You can do this by running `$ cargo add -F credentials_loader`, or editing your `Cargo.toml` to look like this:_
 ```toml
 ...
 [dependencies]
@@ -48,6 +48,21 @@ R3_ACCESS_KEY_ID=
 R3_SECRET_ACCESS_KEY=
 ```
 
+Load the credentials using the `Credentials::load_from_disk` fn:
+```rust
+fn main() {
+    let credentials = remoteit_api::Credentials::load_from_disk().unwrap();
+}
+```
 
+### Providing credentials directly
 
+If you want to store the credentials in a different way, you can also provide them directly.
+You do not need to enable any features for this method.
+
+```rust
+fn main() {
+    let credentials = remoteit_api::Credentials
+}
+```
 
