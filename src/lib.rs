@@ -17,7 +17,7 @@ pub mod api_blocking;
 pub mod auth;
 pub mod credentials;
 #[cfg(feature = "credentials_loader")]
-mod credentials_loader;
+pub mod credentials_loader;
 pub mod operations;
 
 /// Base path for the remote.it API.
