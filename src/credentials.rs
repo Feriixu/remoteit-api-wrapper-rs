@@ -30,6 +30,7 @@ use bon::bon;
 pub struct Credentials {
     pub(crate) r3_access_key_id: String,
     pub(crate) r3_secret_access_key: String,
+    pub(crate) key: Vec<u8>,
 }
 
 #[bon]
@@ -52,22 +53,31 @@ impl Credentials {
         r3_access_key_id: String,
         r3_secret_access_key: String,
     ) -> Result<Self, base64::DecodeError> {
-        let _decode_result = BASE64_STANDARD.decode(&r3_secret_access_key)?;
+        let key = BASE64_STANDARD.decode(&r3_secret_access_key)?;
         Ok(Self {
             r3_access_key_id,
             r3_secret_access_key,
+            key,
         })
     }
 
     /// # Returns
     /// The base64 decoded secret access key.
     #[must_use]
-    pub fn key(&self) -> Vec<u8> {
-        let Ok(key) = BASE64_STANDARD.decode(&self.r3_secret_access_key) else {
-            unreachable!("BUG: The secret access key was not valid base64 encoded, but it should have been validated in the constructor.");
-        };
+    pub fn key(&self) -> &[u8] {
+        &self.key
+    }
 
-        key
+    /// # Returns
+    /// A reference to the r3_access_key_id
+    pub fn access_key_id(&self) -> &str {
+        &self.r3_access_key_id
+    }
+
+    /// # Returns
+    /// The base64 encoded r3_secret_access_key
+    pub fn secret_access_key(&self) -> &str {
+        &self.r3_secret_access_key
     }
 }
 
