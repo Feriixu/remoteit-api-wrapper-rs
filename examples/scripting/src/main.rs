@@ -1,15 +1,18 @@
-use remoteit_api::api_blocking::R3Client;
+use remoteit_api::R3Client;
 use remoteit_api::credentials::Credentials;
 
 fn main() {
-    let credentials = Credentials::builder()
-        .r3_access_key_id("access_key_id")
-        .r3_secret_access_key("secret_acces_key")
-        .build();
+    // See the `load_credentials` example for alternative ways to load credentials.
+    let mut credentials = Credentials::load_from_disk().call().unwrap();
+    let profile = credentials.remove("default").unwrap();
+
+    // Create a new client with the loaded credentials.
     let client = R3Client::builder()
-        .credentials(credentials)
+        .credentials(profile)
         .build();
 
+    // Make a request to the remote.it API.
+    // This call lists all files uploaded to the remote.it API.
     let response = client.get_files().call().unwrap();
     dbg!(&response);
 }

@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-remoteit-api = { path = "../..", features = ["blocking"] }
+remoteit-api = { path = "../..", features = ["blocking", "credentials_loader"] }
