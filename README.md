@@ -8,6 +8,10 @@ This is a Rust wrapper for the [Remote.it API](https://docs.remote.it/developer-
 
 Remote.it is a service that allows you to connect to devices remotely. It provides a way to connect to devices behind NATs and firewalls without having to configure port forwarding.
 
+This crate provides a limited set of GraphQL queries. If you want to write your own GraphQL queries, please see [Developing your own GraphQL operations](#developing-your-own-graphql-operations)
+
+---
+
 ## Blocking or Async
 
 This library provides both blocking and async versions of the API.
@@ -20,9 +24,11 @@ cargo add remoteit-api -F async
 Which one you want to use depends on your use case. If you are writing a CLI tool or a small script, you might want to use the blocking version.
 If you are writing a server or a GUI application, you might want to use the async version.
 
-The developer API is pretty much the same for both versions, so you can switch between them easily.
+The developer API is pretty much the same for both versions, so you can switch between them easily. The async versions of the API functions have the same name as the blocking version, with `_async` appended to the end.
 
-## Providing Credentials
+---
+
+## Obtaining Remote.it Credentials
 
 You can get your credentials here: https://app.remote.it/#/account/accessKey.  
 _Note: You need to have a Remote.it account to get the credentials._
@@ -55,6 +61,8 @@ When calling this function, you have the option of providing a custom file path.
 If you want to store the credentials in a different way, you can also provide them directly by using the `Credentials::builder()` function.
 You do not need to enable any features for this method.
 
+---
+
 ## Developing your own GraphQL operations
 
 ### Getting the schema
@@ -81,7 +89,7 @@ See [api_blocking.rs](src/api_blocking.rs) or [api_async.rs](src/api_async.rs) f
 To sign and send the requests, you can use `R3Client::send_remoteit_graphql_request` from [api_blocking.rs](src/api_blocking.rs) or `R3Client::send_remoteit_graphql_request_async` from [api_async.rs](src/api_async.rs)
 or implement your own signing and sending function, following the example of aforementioned functions.
 
-
+---
 
 ## Note on reqwest and TLS
 
