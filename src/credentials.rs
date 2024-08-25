@@ -30,8 +30,11 @@ use bon::bon;
 pub struct Credentials {
     pub(crate) r3_access_key_id: String,
     pub(crate) r3_secret_access_key: String,
+    #[serde(skip)] // Don't want to serialize this one
     pub(crate) key: Vec<u8>,
 }
+
+
 
 #[bon]
 impl Credentials {
