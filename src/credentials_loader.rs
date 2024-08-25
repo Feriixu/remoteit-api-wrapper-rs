@@ -26,6 +26,7 @@ pub enum Error {
 /// - [`CredentialProfiles::profile`]
 #[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
 pub struct CredentialProfiles {
+    #[serde(flatten)]
     pub(crate) profiles: HashMap<String, Credentials>,
 }
 
@@ -134,10 +135,9 @@ mod tests {
 
         let credentials = Credentials::load_from_disk()
             .custom_credentials_path(file.path().to_path_buf())
-            .call();
+            .call()
+            .unwrap();
 
-        assert!(credentials.is_ok());
-        let credentials = credentials.unwrap();
         assert!(credentials.is_empty());
     }
 
@@ -154,10 +154,9 @@ mod tests {
 
         let credentials = Credentials::load_from_disk()
             .custom_credentials_path(file.path().to_path_buf())
-            .call();
+            .call()
+            .unwrap();
 
-        assert!(credentials.is_ok());
-        let credentials = credentials.unwrap();
         assert_eq!(credentials.len(), 1);
         let credentials = credentials.profile("default").unwrap().unwrap();
         assert_eq!(credentials.r3_access_key_id, "foo");
@@ -181,10 +180,9 @@ mod tests {
 
         let credentials = Credentials::load_from_disk()
             .custom_credentials_path(file.path().to_path_buf())
-            .call();
+            .call()
+            .unwrap();
 
-        assert!(credentials.is_ok());
-        let credentials = credentials.unwrap();
         assert_eq!(credentials.len(), 2);
         let profile = credentials.profile("default").unwrap().unwrap();
         assert_eq!(profile.r3_access_key_id, "foo");
