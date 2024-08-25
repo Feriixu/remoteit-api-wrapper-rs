@@ -31,7 +31,7 @@ Once you have the credentials, you have several options to use them with this cr
 
 ### Providing credentials using the credentials file as per remote.it spec
 
-:information_source: _You need to enable the `credentials_loader` feature to use this method.
+ℹ️ _You need to enable the `credentials_loader` feature to use this method.
 You can do this by running `$ cargo add -F credentials_loader`, or editing your `Cargo.toml` to look like this:_
 ```toml
 ...
