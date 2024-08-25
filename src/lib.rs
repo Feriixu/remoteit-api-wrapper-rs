@@ -2,7 +2,7 @@ use bon::builder;
 use crate::credentials::Credentials;
 
 #[builder]
-struct R3Client {
+pub struct R3Client {
     credentials: Credentials,
 }
 
