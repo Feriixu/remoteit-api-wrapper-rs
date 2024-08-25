@@ -1,4 +1,8 @@
-//! This module contains the blocking API for the Remote.it API.
+//! Enabled by the `blocking` feature. Contains blocking implementations of the pre-written queries.
+//!
+//! On the docs page of this module, you can only see the builder structs for the functions.
+//!
+//! Please see [`R3Client`] for the actual functions you can call.
 
 use crate::auth::{build_auth_header, get_date};
 use crate::operations::{
@@ -29,14 +33,14 @@ impl R3Client {
         query_body: &QueryBody<V>,
     ) -> Result<Response<R>, Box<dyn Error>> {
         let date = get_date();
-        let auth_header = build_auth_header(
-            &self.credentials.r3_access_key_id,
-            &self.credentials.key(),
-            "application/json",
-            &Method::POST,
-            GRAPHQL_PATH,
-            &date,
-        );
+        let auth_header = build_auth_header()
+            .key_id(&self.credentials.r3_access_key_id)
+            .key(&self.credentials.key)
+            .content_type("application/json")
+            .method(&Method::POST)
+            .path(GRAPHQL_PATH)
+            .date(&date)
+            .call();
         let client = Client::new();
         let response = client
             .post(format!("{BASE_URL}{GRAPHQL_PATH}"))
