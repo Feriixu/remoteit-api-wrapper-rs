@@ -1,3 +1,7 @@
+//! Contains items related to loading credentials from disk.
+//!
+//! Please see [`Credentials`] for more.
+
 use crate::credentials::Credentials;
 use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use base64::Engine;
@@ -5,6 +9,8 @@ use bon::bon;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
+/// Errors that can occur during the loading of credentials from disk.
+#[allow(missing_docs)]
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("The user's home directory could not be found. Please refer to the `dirs` crate for more information.")]
@@ -98,7 +104,24 @@ impl Credentials {
     ///
     /// # Errors
     /// * [`Error::HomeDirNotFound`], when the [`dirs`] create cannot find the user's home directory.
-    /// * [`Error::CouldNotReadCredentials`], when the credentials file could not be parsed by the [`figment`] crate.
+    /// * [`Error::CouldNotReadCredentials`], when the credentials file could not be parsed by the [`config`] crate.
+    ///
+    /// # Example
+    /// You can load credentials from the default path (`~/.remoteit/credentials` on Unix-like), or provide a custom path.
+    /// ```
+    /// # use remoteit_api::credentials::Credentials;
+    /// let credentials_file = Credentials::load_from_disk()
+    ///     .custom_credentials_path("path/to/file") // Optional
+    ///     .call();
+    /// ```
+    /// You can also pass a PathBuf, or anything that implements [`Into<PathBuf>`]
+    /// ```
+    /// # use std::path::PathBuf;
+    /// # use remoteit_api::credentials::Credentials;
+    /// let credentials_file = Credentials::load_from_disk()
+    ///     .custom_credentials_path(PathBuf::from("path/to/file")) // Optional
+    ///     .call();
+    /// ```
     #[builder]
     pub fn load_from_disk(
         custom_credentials_path: Option<PathBuf>,
