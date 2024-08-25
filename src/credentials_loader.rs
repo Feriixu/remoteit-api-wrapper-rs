@@ -3,8 +3,6 @@
 //! Please see [`Credentials`] for more.
 
 use crate::credentials::Credentials;
-use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
-use base64::Engine;
 use bon::bon;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -21,6 +19,16 @@ pub enum Error {
     CredentialsParse(#[from] config::ConfigError),
 }
 
+/// This is how the credentials are saved in the file.
+/// Unverified, because the r3_secret_access_key must be valid base64, but is not validated while parsing the file.
+#[derive(
+    Debug, Clone, PartialOrd, PartialEq, Eq, Ord, Hash, serde::Deserialize, serde::Serialize,
+)]
+pub(crate) struct UnverifiedCredentials {
+    pub(crate) r3_access_key_id: String,
+    pub(crate) r3_secret_access_key: String,
+}
+
 /// A struct representing the remote.it credentials file.
 ///
 /// The credentials file can have multiple profiles, each with its own access key ID and secret access key.
@@ -33,29 +41,10 @@ pub enum Error {
 #[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
 pub struct CredentialProfiles {
     #[serde(flatten)]
-    pub(crate) profiles: HashMap<String, Credentials>,
+    pub(crate) profiles: HashMap<String, UnverifiedCredentials>,
 }
 
 impl CredentialProfiles {
-    /// See [`CredentialProfiles::take_profile`] if you need an owned value.
-    ///
-    /// # Returns
-    /// - [`None`] if the profile with the given name does not exist.
-    /// - [`Some`] containing a reference to the [`Credentials`] with the given name, if the profile exists.
-    ///
-    /// # Errors
-    /// - [`base64::DecodeError`] if the secret access key of the profile with the given name is not base64 encoded.
-    pub fn profile(&self, profile_name: &str) -> Result<Option<&Credentials>, base64::DecodeError> {
-        let profile = self.profiles.get(profile_name);
-        if profile.is_none() {
-            return Ok(None);
-        }
-
-        let _decode_result = BASE64_STANDARD.decode(&profile.unwrap().r3_secret_access_key)?;
-
-        Ok(profile)
-    }
-
     /// Takes the profile with the given name out of the inner [`HashMap`], validated the secret access key and returns it.
     /// You can only take a profile once, after that it is removed from the inner [`HashMap`].
     ///
@@ -69,15 +58,16 @@ impl CredentialProfiles {
         &mut self,
         profile_name: &str,
     ) -> Result<Option<Credentials>, base64::DecodeError> {
-        let profile = self.profiles.remove(profile_name);
+        let maybe_unverified_credentials = self.profiles.remove(profile_name);
 
-        let Some(profile) = profile else {
+        let Some(unverified_credentials) = maybe_unverified_credentials else {
             return Ok(None);
         };
 
-        let _decode_result = BASE64_STANDARD.decode(&profile.r3_secret_access_key)?;
-
-        Ok(Some(profile))
+        Credentials::builder()
+            .r3_access_key_id(&unverified_credentials.r3_access_key_id)
+            .r3_secret_access_key(&unverified_credentials.r3_secret_access_key)
+            .build().map(Some)
     }
 
     /// # Returns
@@ -175,13 +165,13 @@ mod tests {
         let mut file = tempfile::NamedTempFile::new().unwrap();
         file.write_all(credentials.as_bytes()).unwrap();
 
-        let credentials = Credentials::load_from_disk()
+        let mut credentials = Credentials::load_from_disk()
             .custom_credentials_path(file.path().to_path_buf())
             .call()
             .unwrap();
 
         assert_eq!(credentials.len(), 1);
-        let credentials = credentials.profile("default").unwrap().unwrap();
+        let credentials = credentials.take_profile("default").unwrap().unwrap();
         assert_eq!(credentials.r3_access_key_id, "foo");
         assert_eq!(credentials.r3_secret_access_key, "YmFy");
     }
@@ -201,16 +191,16 @@ mod tests {
         let mut file = tempfile::NamedTempFile::new().unwrap();
         file.write_all(credentials.as_bytes()).unwrap();
 
-        let credentials = Credentials::load_from_disk()
+        let mut credentials = Credentials::load_from_disk()
             .custom_credentials_path(file.path().to_path_buf())
             .call()
             .unwrap();
 
         assert_eq!(credentials.len(), 2);
-        let profile = credentials.profile("default").unwrap().unwrap();
+        let profile = credentials.take_profile("default").unwrap().unwrap();
         assert_eq!(profile.r3_access_key_id, "foo");
         assert_eq!(profile.r3_secret_access_key, "YmFy");
-        let profile = credentials.profile("other").unwrap().unwrap();
+        let profile = credentials.take_profile("other").unwrap().unwrap();
         assert_eq!(profile.r3_access_key_id, "baz");
         assert_eq!(profile.r3_secret_access_key, "YmFy");
     }
