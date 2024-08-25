@@ -8,7 +8,6 @@ use bon::builder;
 use chrono::Utc;
 use reqwest::Method;
 use ring::hmac;
-use crate::R3Client;
 
 /// You probably don't want to use this function directly, unless you are implementing your own abstraction over the remote.it API.
 ///
@@ -43,7 +42,7 @@ pub fn create_signature(key: &[u8], message: &str) -> String {
 ///     .key(credentials.key())
 ///     .content_type("application/json")
 ///     .method(&Method::POST)
-///     .url(GRAPHQL_PATH)
+///     .path(GRAPHQL_PATH)
 ///     .date(&date)
 ///     .call();
 /// ```
