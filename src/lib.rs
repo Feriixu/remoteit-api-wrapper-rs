@@ -30,7 +30,7 @@ pub const GRAPHQL_PATH: &str = "/graphql/v1";
 pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
 
 /// A client for the remote.it API.
-/// 
+///
 /// # Example
 /// You can instantiate a new [`R3Client`] using the builder pattern:
 /// ```

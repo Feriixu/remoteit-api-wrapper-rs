@@ -58,15 +58,15 @@ impl Credentials {
             r3_secret_access_key,
         })
     }
-    
-    /// # Returns 
+
+    /// # Returns
     /// The base64 decoded secret access key.
-    #[must_use] 
+    #[must_use]
     pub fn key(&self) -> Vec<u8> {
         let Ok(key) = BASE64_STANDARD.decode(&self.r3_secret_access_key) else {
             unreachable!("BUG: The secret access key was not valid base64 encoded, but it should have been validated in the constructor.");
         };
-        
+
         key
     }
 }

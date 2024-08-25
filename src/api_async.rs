@@ -50,7 +50,7 @@ impl R3Client {
     }
 
     // region Scripting
-    
+
     /// Get a list of files that were uploaded to remote.it.
     #[builder]
     pub async fn get_files_async(

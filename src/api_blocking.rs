@@ -18,9 +18,9 @@ use std::error::Error;
 #[bon]
 impl R3Client {
     /// Sends a signed GraphQL request to the remote.it API in a blocking way.
-    /// 
+    ///
     /// You probably don't want to use this function directly, but rather use the other functions in this module like [`R3Client::get_files()`].
-    /// 
+    ///
     /// # Errors
     /// - Any error that occurs during the request.
     /// - Any error that occurs during deserialization of the response.
@@ -50,7 +50,7 @@ impl R3Client {
     }
 
     // region Scripting
-    
+
     /// Get a list of files that were uploaded to remote.it.
     #[builder]
     pub fn get_files(self) -> Result<Response<get_files::ResponseData>, Box<dyn Error>> {
