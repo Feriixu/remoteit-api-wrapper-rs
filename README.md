@@ -34,10 +34,10 @@ Once you have the credentials, you have several options to use them with this cr
 ℹ️ _You need to enable the `credentials_loader` feature to use this method.
 You can do this by running `$ cargo add -F credentials_loader`, or editing your `Cargo.toml` to look like this:_
 ```toml
-...
+# ...
 [dependencies]
 remoteit-api = { version = "...", features = ["credentials_loader"] }
-...
+# ...
 ```
 
 Save your remote.it credentials to `~/.remoteit/credentials`. The file should look like this:
@@ -55,8 +55,8 @@ When calling this function, you have the option of providing a custom file path.
 If you want to store the credentials in a different way, you can also provide them directly by using the `Credentials::builder()` function.
 You do not need to enable any features for this method.
 
-## Note on Reqwest and TLS
+## Note on reqwest and TLS
 
 This crate uses `reqwest` to make HTTP requests.
 You may want to enable the `native-tls-vendored` feature to use the vendored version of `native-tls` with `reqwest`.
-This is mainly useful for cross-compiling. If you are not cross-compiling, this will most likey be unnecessary.
+This is mainly useful for cross-compiling. If you are not cross-compiling, this will most likely be unnecessary.

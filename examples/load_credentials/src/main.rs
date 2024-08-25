@@ -9,7 +9,7 @@ fn main() {
         .build();
 
     // If the `credentials_loader` feature is enabled, the `load_from_disk` method is available.
-    // By default (and as per remote.it spec), the credentials are loaded from `~/.remoteit/credentials`.
+    // By default, and as per remote.it specs, the credentials are loaded from `~/.remoteit/credentials`.
     let _credentials = Credentials::load_from_disk().call().unwrap();
 
     // Or you can load the credentials from a custom file path, if you prefer.
