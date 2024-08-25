@@ -1,12 +1,18 @@
+#![allow(missing_docs)]
+
 use chrono::Local;
 use graphql_client::GraphQLQuery;
 
 /// Define [`DateTime`] as a [`chrono::DateTime<Local>`], because it is not a built-in type in GraphQL.
 type DateTime = chrono::DateTime<Local>;
+/// Define [`Any`] as a [`serde_json::Value`], because it is not a built-in type in GraphQL.
 type Any = serde_json::Value;
+/// Define [`Object`] as a [`serde_json::Map<String, Any>`], because it is not a built-in type in GraphQL.
 type Object = serde_json::Map<String, Any>;
 
 // region Scripting
+
+/// Query, which retrieves a list of files, that were uploaded to remote.it.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -15,6 +21,7 @@ type Object = serde_json::Map<String, Any>;
 )]
 pub struct GetFiles;
 
+/// Mutation, which deletes a file from remote.it. Deletes all versions of the file.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -23,6 +30,7 @@ pub struct GetFiles;
 )]
 pub struct DeleteFile;
 
+/// Mutation, which deletes a version of a file from remote.it. (Not the whole file)
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -31,6 +39,7 @@ pub struct DeleteFile;
 )]
 pub struct DeleteFileVersion;
 
+/// Execution, to start scripting jobs on one or more devices.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -39,6 +48,7 @@ pub struct DeleteFileVersion;
 )]
 pub struct StartJob;
 
+/// Execution, to cancel a job. See remote.it docs on more information on when jobs can be cancelled.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -47,6 +57,8 @@ pub struct StartJob;
 )]
 pub struct CancelJob;
 
+/// Query, which retrieves a list of jobs, that were started on remote.it.
+/// You can filter the jobs.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -58,6 +70,7 @@ pub struct GetJobs;
 
 // region Devices and Services
 
+/// Query, which retrieves a list of services, that are available on remote.it.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -66,6 +79,8 @@ pub struct GetJobs;
 )]
 pub struct GetApplicationTypes;
 
+/// Query, which retrieves a list of devices.
+/// You can use this to get the IDs of devices, for example for starting scripting jobs.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
@@ -74,6 +89,7 @@ pub struct GetApplicationTypes;
 )]
 pub struct GetDevices;
 
+/// Query, which retrieves a download link for a CSV file, that contains information about devices.
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",

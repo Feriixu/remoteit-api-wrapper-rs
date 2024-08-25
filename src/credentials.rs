@@ -6,6 +6,24 @@ use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
 use bon::bon;
 
+/// Credentials for the remote.it API.
+/// Remote.it credentials consist of an access key ID and a base64 encoded secret access key.
+///
+/// # Example
+/// You can directly create a new [`Credentials`] struct using the builder pattern:
+/// ```
+/// # use remoteit_api::credentials::Credentials;
+/// let credentials = Credentials::builder()
+///     .r3_access_key_id("foo")
+///     .r3_secret_access_key("YmFy")
+///     .build();
+/// ```
+/// If you enable the `credentials_loader` feature, you can also load the credentials from the default, or a custom file:
+/// ```
+/// # use remoteit_api::credentials::Credentials;
+/// let creds_from_default_loc = Credentials::load_from_disk().call().unwrap();
+/// let creds_from_custom_loc = Credentials::load_from_disk_with_path("/path/to/credentials").call().unwrap();
+/// ```
 #[derive(
     Debug, Clone, PartialOrd, PartialEq, Eq, Ord, Hash, serde::Deserialize, serde::Serialize,
 )]
@@ -39,6 +57,17 @@ impl Credentials {
             r3_access_key_id,
             r3_secret_access_key,
         })
+    }
+    
+    /// # Returns 
+    /// The base64 decoded secret access key.
+    #[must_use] 
+    pub fn key(&self) -> Vec<u8> {
+        let Ok(key) = BASE64_STANDARD.decode(&self.r3_secret_access_key) else {
+            unreachable!("BUG: The secret access key was not valid base64 encoded, but it should have been validated in the constructor.");
+        };
+        
+        key
     }
 }
 

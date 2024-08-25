@@ -1,6 +1,6 @@
 [package]
 name = "remoteit-api"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 authors = ["Feriixu <remoteit-api.9iois@passmail.net>"]
 description = "A wrapper around the Remote.it GraphQL API, also implementing the custom request signing."
@@ -23,9 +23,15 @@ async = ["dep:reqwest"]
 
 native-tls-vendored = ["reqwest/native-tls-vendored"]
 
+[lints.rust]
+missing_docs = "deny"
+
 [lints.clippy]
 pedantic = "warn"
 cargo = "warn"
+missing_errors_doc = { level = "deny", priority = -1 }
+missing_panics_doc = { level = "deny", priority = -1 }
+
 
 [dependencies]
 chrono = { version = "0.4.38", features = ["serde"] }

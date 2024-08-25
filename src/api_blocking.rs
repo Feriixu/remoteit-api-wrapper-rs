@@ -1,3 +1,5 @@
+//! This module contains the blocking API for the Remote.it API.
+
 use crate::auth::{build_auth_header, get_date};
 use crate::operations::{
     cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files,
@@ -5,8 +7,6 @@ use crate::operations::{
     GetFiles, GetJobs, StartJob,
 };
 use crate::{R3Client, BASE_URL, GRAPHQL_PATH};
-use base64::prelude::BASE64_STANDARD;
-use base64::Engine;
 use bon::bon;
 use graphql_client::{GraphQLQuery, QueryBody, Response};
 use reqwest::blocking::Client;
@@ -14,19 +14,24 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use std::error::Error;
 
+/// Impl block for blocking API calls.
 #[bon]
 impl R3Client {
+    /// Sends a signed GraphQL request to the remote.it API in a blocking way.
+    /// 
+    /// You probably don't want to use this function directly, but rather use the other functions in this module like [`R3Client::get_files()`].
+    /// 
+    /// # Errors
+    /// - Any error that occurs during the request.
+    /// - Any error that occurs during deserialization of the response.
     pub fn send_remoteit_graphql_request<V: Serialize, R: for<'a> Deserialize<'a>>(
         self,
         query_body: &QueryBody<V>,
     ) -> Result<Response<R>, Box<dyn Error>> {
         let date = get_date();
-        let key = BASE64_STANDARD
-            .decode(&self.credentials.r3_secret_access_key)
-            .unwrap();
         let auth_header = build_auth_header(
             &self.credentials.r3_access_key_id,
-            &key,
+            &self.credentials.key(),
             "application/json",
             &Method::POST,
             GRAPHQL_PATH,
@@ -39,31 +44,38 @@ impl R3Client {
             .header("Content-Type", "application/json")
             .header("Authorization", auth_header)
             .json(&query_body)
-            .send()
-            .unwrap();
+            .send()?;
         let response: Response<R> = response.json()?;
         Ok(response)
     }
 
     // region Scripting
+    
+    /// Get a list of files that were uploaded to remote.it.
     #[builder]
     pub fn get_files(self) -> Result<Response<get_files::ResponseData>, Box<dyn Error>> {
         let request_body = GetFiles::build_query(get_files::Variables {});
         self.send_remoteit_graphql_request(&request_body)
     }
 
+    /// Delete a file from remote.it. Deletes all versions of the file.
     #[builder]
     pub fn delete_file(
         self,
+        /// The ID of the file to delete.
+        /// You can get this from the response of [`R3Client::get_files()`].
         file_id: String,
     ) -> Result<Response<delete_file::ResponseData>, Box<dyn Error>> {
         let request_body = DeleteFile::build_query(delete_file::Variables { file_id });
         self.send_remoteit_graphql_request(&request_body)
     }
 
+    /// Delete a version of a file from remote.it. (Not the whole file)
     #[builder]
     pub fn delete_file_version(
         self,
+        /// The ID of the file version to delete.
+        /// You can get this from the response of [`R3Client::get_files()`].
         file_version_id: String,
     ) -> Result<Response<delete_file_version::ResponseData>, Box<dyn Error>> {
         let request_body =
@@ -71,11 +83,20 @@ impl R3Client {
         self.send_remoteit_graphql_request(&request_body)
     }
 
+    /// Start scripting jobs on one or more devices.
     #[builder]
     pub fn start_job(
         self,
+        /// The ID of the script file to run.
+        /// Note that this needs to be an executable file.
+        /// Get a list of files using [`R3Client::get_files()`].
         file_id: String,
+        /// The IDs of the devices to run the script on.
+        /// Get a list of devices using [`R3Client::get_devices()`].
         device_ids: Vec<String>,
+        /// Arguments to pass to the script.
+        /// These are optional.
+        /// For more information on script arguments please consult the remote.it API documentation.
         arguments: Option<Vec<start_job::ArgumentInput>>,
     ) -> Result<Response<start_job::ResponseData>, Box<dyn Error>> {
         let request_body = StartJob::build_query(start_job::Variables {
@@ -86,20 +107,27 @@ impl R3Client {
         self.send_remoteit_graphql_request(&request_body)
     }
 
+    /// Cancel a job. See remote.it docs on more information on when jobs can be cancelled.
     #[builder]
     pub fn cancel_job(
         self,
+        /// The ID of the job to cancel.
+        /// You get this after starting a job using [`R3Client::start_job()`].
         job_id: String,
     ) -> Result<Response<cancel_job::ResponseData>, Box<dyn Error>> {
         let request_body = CancelJob::build_query(cancel_job::Variables { job_id });
         self.send_remoteit_graphql_request(&request_body)
     }
 
+    /// Get a list of jobs that were started on remote.it.
     #[builder]
     pub fn get_jobs(
         self,
+        /// Optional organization ID for org context.
         org_id: Option<String>,
+        /// Optional list of job IDs to filter by.
         job_id_filter: Option<Vec<String>>,
+        /// Optional list of job statuses to filter by.
         status_filter: Option<Vec<get_jobs::JobStatusEnum>>,
     ) -> Result<Response<get_jobs::ResponseData>, Box<dyn Error>> {
         let request_body = GetJobs::build_query(get_jobs::Variables {
@@ -114,6 +142,7 @@ impl R3Client {
 
     // region Devices and Services
 
+    /// Get a list of application types that are available on remote.it.
     #[builder]
     pub fn get_application_types(
         self,
@@ -122,11 +151,15 @@ impl R3Client {
         self.send_remoteit_graphql_request(&request_body)
     }
 
+    /// Get a list of devices.
     #[builder]
     pub fn get_devices(
         self,
+        /// Optional organization ID for org context.
         org_id: Option<String>,
+        /// Optional limit for the number of devices to return.
         limit: Option<i64>,
+        /// Optional offset for the devices. Useful for pagination.
         offset: Option<i64>,
     ) -> Result<Response<get_devices::ResponseData>, Box<dyn Error>> {
         let request_body = GetDevices::build_query(get_devices::Variables {
