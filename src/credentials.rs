@@ -22,7 +22,7 @@ use bon::bon;
 /// ```
 /// # use remoteit_api::credentials::Credentials;
 /// let creds_from_default_loc = Credentials::load_from_disk().call().unwrap();
-/// let creds_from_custom_loc = Credentials::load_from_disk().custom_credentials_path("/path/to/credentials").call().unwrap();
+/// let creds_from_custom_loc = Credentials::load_from_disk().custom_credentials_path(".env.remoteit").call().unwrap();
 /// ```
 #[derive(
     Debug, Clone, PartialOrd, PartialEq, Eq, Ord, Hash, serde::Deserialize, serde::Serialize,
