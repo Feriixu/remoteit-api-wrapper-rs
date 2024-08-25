@@ -21,6 +21,8 @@ blocking = ["dep:reqwest", "reqwest/blocking"]
 # Enables the async API, which is used to make async requests to the remote.it API.
 async = ["dep:reqwest"]
 
+native-tls-vendored = ["reqwest/native-tls-vendored"]
+
 [lints.clippy]
 pedantic = "warn"
 cargo = "warn"
@@ -36,7 +38,7 @@ thiserror = "1.0.63"
 bon = "1.2.1"
 serde_json = "1.0.125"
 graphql_client = "0.14.0"
-reqwest = { version = "0.12.5", features = ["json"], default-features = false, optional = true}
+reqwest = { version = "0.12.5", features = ["json", "http2", "default-tls"], default-features = false, optional = true}
 config = { version = "0.14.0", features = ["ini"], optional = true, default-features = false }
 dirs = { version = "5.0.1", optional = true }
 
