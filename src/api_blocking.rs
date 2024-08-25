@@ -129,6 +129,8 @@ impl R3Client {
         self,
         /// Optional organization ID for org context.
         org_id: Option<String>,
+        /// Optional limit how many results are returned. It is highly recommended to set a limit, because this query can take quite a while otherwise.
+        limit: Option<i64>,
         /// Optional list of job IDs to filter by.
         job_id_filter: Option<Vec<String>>,
         /// Optional list of job statuses to filter by.
@@ -136,6 +138,7 @@ impl R3Client {
     ) -> Result<Response<get_jobs::ResponseData>, Box<dyn Error>> {
         let request_body = GetJobs::build_query(get_jobs::Variables {
             org_id,
+            limit,
             job_ids: job_id_filter,
             statuses: status_filter,
         });

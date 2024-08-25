@@ -1,8 +1,8 @@
-query GetJobs($orgId: String, $jobIds: [ID!], $statuses: [JobStatusEnum!]) {
+query GetJobs($orgId: String, $limit: Int, $jobIds: [ID!], $statuses: [JobStatusEnum!]) {
     login {
         # The ID is the Org ID
         account(id: $orgId) {
-            jobs(ids: $jobIds, statuses: $statuses, size: 1000)
+            jobs(ids: $jobIds, statuses: $statuses, size: $limit)
             {
                 hasMore
                 total
