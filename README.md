@@ -4,6 +4,12 @@
 [![License](https://img.shields.io/crates/l/remoteit-api)](https://crates.io/crates/remoteit-api)
 [![Docs.rs](https://docs.rs/remoteit-api/badge.svg)](https://docs.rs/remoteit-api)
 
+## 🚧 Under construction 🚧
+This crate is currently unstable. The developer API is subject to breaking changes until v1.0.0.
+If you encounter any issues or have a suggestion, please open an [Issue on GitHub](https://github.com/Feriixu/remoteit-api-wrapper-rs/issues/new). Thank you.
+
+---
+
 This is a Rust wrapper for the [Remote.it API](https://docs.remote.it/developer-tools/api).
 
 Remote.it is a service that allows you to connect to devices remotely. It provides a way to connect to devices behind NATs and firewalls without having to configure port forwarding.
