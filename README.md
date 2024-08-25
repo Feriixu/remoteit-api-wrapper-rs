@@ -40,29 +40,23 @@ remoteit-api = { version = "...", features = ["credentials_loader"] }
 ...
 ```
 
-Save your remote.it credentials to `~/.remoteit/credentials`.  
-The file should look like this:
+Save your remote.it credentials to `~/.remoteit/credentials`. The file should look like this:
 ```ini
 [default]
 R3_ACCESS_KEY_ID=
 R3_SECRET_ACCESS_KEY=
 ```
 
-Load the credentials using the `Credentials::load_from_disk` fn:
-```rust
-fn main() {
-    let credentials = remoteit_api::Credentials::load_from_disk().unwrap();
-}
-```
+Load the credentials using the `Credentials::load_from_disk` function.  
+When calling this function, you have the option of providing a custom file path.
 
 ### Providing credentials directly
 
-If you want to store the credentials in a different way, you can also provide them directly.
+If you want to store the credentials in a different way, you can also provide them directly by using the `Credentials::builder()` function.
 You do not need to enable any features for this method.
 
-```rust
-fn main() {
-    let credentials = remoteit_api::Credentials
-}
-```
+## Note on Reqwest and TLS
 
+This crate uses `reqwest` to make HTTP requests.
+You may want to enable the `native-tls-vendored` feature to use the vendored version of `native-tls` with `reqwest`.
+This is mainly useful for cross-compiling. If you are not cross-compiling, this will most likey be unnecessary.
