@@ -15,17 +15,43 @@ query GetDevices($orgId: String, $limit: Int, $offset: Int) {
                 items {
                     id
                     name
+                    created
                     state
                     lastReported
                     access {
+                        created
                         user {
+                            id
                             email
                         }
+                        scripting
                     }
                     tags {
                         name
                     }
                     attributes
+                    services {
+                        id
+                        name
+                        created
+                        access {
+                            created
+                            user {
+                                id
+                                email
+                            }
+                            scripting
+                        }
+                        application
+                        attributes
+                        enabled
+                    }
+                    categoryA
+                    categoryB
+                    categoryC
+                    categoryD
+                    categoryE
+
                 }
             }
         }
