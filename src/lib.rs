@@ -27,3 +27,10 @@ pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
 pub struct R3Client {
     credentials: Credentials,
 }
+
+impl R3Client {
+    #[must_use]
+    pub fn credentials(&self) -> &Credentials {
+        &self.credentials
+    }
+}

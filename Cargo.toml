@@ -9,29 +9,34 @@ repository = "https://github.com/Feriixu/remoteit-api-wrapper-rs"
 keywords = ["remoteit", "api", "wrapper", "graphql", "client"]
 categories = ["api-bindings"]
 
+[package.metadata.docs.rs]
+all-features = true
+
 [features]
 default = []
-full = ["credentials_loader", "blocking", "async"]
+# Enables the credentials loader, which can be used to load remote.it credentials from a file.
 credentials_loader = ["dep:dirs", "dep:config"]
-blocking = []
-async = []
+# Enabled the blocking API, which is used to make blocking requests to the remote.it API.
+blocking = ["dep:reqwest", "reqwest/blocking"]
+# Enables the async API, which is used to make async requests to the remote.it API.
+async = ["dep:reqwest"]
 
 [lints.clippy]
 pedantic = "warn"
 cargo = "warn"
 
 [dependencies]
-base64 = "0.22.1"
 chrono = { version = "0.4.38", features = ["serde"] }
-itertools = "0.13.0"
-reqwest = { version = "0.12.5", features = ["blocking", "multipart", "json"] }
-ring = "0.17.8"
 serde = { version = "1.0.208", features = ["derive"] }
+base64 = "0.22.1"
+itertools = "0.13.0"
+ring = "0.17.8"
 hmac = "0.13.0-pre.4"
 thiserror = "1.0.63"
 bon = "1.2.1"
 serde_json = "1.0.125"
 graphql_client = "0.14.0"
+reqwest = { version = "0.12.5", features = ["json"], default-features = false, optional = true}
 config = { version = "0.14.0", features = ["ini"], optional = true, default-features = false }
 dirs = { version = "5.0.1", optional = true }
 
