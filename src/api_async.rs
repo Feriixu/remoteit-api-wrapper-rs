@@ -219,7 +219,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_jobs_async() {
-        let response = get_client().get_jobs_async().call().await.unwrap();
+        let response = get_client().get_jobs_async().limit(1).call().await.unwrap();
         assert!(response.data.is_some());
         assert!(response.errors.is_none());
     }

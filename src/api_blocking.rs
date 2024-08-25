@@ -209,7 +209,7 @@ mod tests {
 
     #[test]
     fn test_get_jobs() {
-        let response = get_client().get_jobs().call().unwrap();
+        let response = get_client().get_jobs().limit(1).call().unwrap();
         assert!(response.data.is_some());
         assert!(response.errors.is_none());
     }
