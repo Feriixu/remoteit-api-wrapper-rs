@@ -15,6 +15,7 @@ query GetDevices($orgId: String, $limit: Int, $offset: Int) {
                 items {
                     id
                     name
+                    online
                     created
                     state
                     lastReported
