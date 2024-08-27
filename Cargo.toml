@@ -1,6 +1,6 @@
 [package]
 name = "remoteit-api"
-version = "0.9.0"
+version = "0.10.0"
 edition = "2021"
 authors = ["Feriixu <remoteit-api.9iois@passmail.net>"]
 description = "A wrapper around the Remote.it GraphQL API, also implementing the custom request signing."
@@ -16,12 +16,25 @@ all-features = true
 
 [features]
 default = []
+
 # Enables the credentials loader, which can be used to load remote.it credentials from a file.
 credentials_loader = ["dep:dirs", "dep:config"]
+
 # Enabled the blocking API, which is used to make blocking requests to the remote.it API.
 blocking = ["dep:reqwest", "reqwest/blocking"]
+
 # Enables the async API, which is used to make async requests to the remote.it API.
 async = ["dep:reqwest"]
+
+# Enables file upload support. See https://docs.remote.it/developer-tools/device-scripting#uploading-a-script
+# This feature on it's own does not provide the necessary functionality to upload files. You need to also enable either async or blocking.
+file_upload = [
+    "dep:reqwest",
+    "dep:tokio",
+    "dep:tokio-util",
+    "reqwest/multipart",
+    "reqwest/stream"]
+
 native-tls-vendored = ["reqwest/native-tls-vendored"]
 
 
@@ -47,7 +60,9 @@ thiserror = "1.0.63"
 bon = "1.2.1"
 serde_json = "1.0.125"
 graphql_client = "0.14.0"
-reqwest = { version = "0.12.5", features = ["json", "http2", "default-tls"], default-features = false, optional = true}
+tokio = { version = "1.39.3", optional = true, default-features = false, features = ["fs"] }
+tokio-util = { version = "0.7.11", optional = true, default-features = false, features = ["codec"]}
+reqwest = { version = "0.12.7", features = ["json", "http2", "default-tls"], default-features = false, optional = true}
 config = { version = "0.14.0", features = ["ini"], optional = true, default-features = false }
 dirs = { version = "5.0.1", optional = true }
 

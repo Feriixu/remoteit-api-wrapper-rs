@@ -20,6 +20,10 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![cfg_attr(docsrs, doc(cfg(all())))]
 
+#[cfg(all(feature = "file_upload", not(any(feature = "async", feature = "blocking"))))]
+compile_error!("The `file_upload` feature is useless on it's own. You also need to enable one of: `async`, `blocking` ");
+
+
 use bon::builder;
 
 #[cfg(feature = "async")]
@@ -41,6 +45,9 @@ mod credentials_loader;
 pub use credentials_loader::{CredentialsLoaderError, CredentialProfiles};
 
 pub mod operations;
+
+#[cfg(feature = "file_upload")]
+mod api_file_upload;
 
 /// Base path for the remote.it API.
 pub const BASE_URL: &str = "https://api.remote.it";
