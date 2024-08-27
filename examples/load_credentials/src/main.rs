@@ -1,4 +1,4 @@
-use remoteit_api::credentials::Credentials;
+use remoteit_api::Credentials;
 use remoteit_api::R3Client;
 
 fn main() {
