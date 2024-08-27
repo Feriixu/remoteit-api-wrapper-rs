@@ -15,6 +15,7 @@ use ring::hmac;
 ///
 /// # Returns
 /// Base64 encoded HMAC signature.
+#[must_use]
 pub fn create_signature(key: &[u8], message: &str) -> String {
     let signing_key = hmac::Key::new(hmac::HMAC_SHA256, key);
     let signature = hmac::sign(&signing_key, message.as_bytes());

@@ -1,3 +1,9 @@
+//! Enabled by the `file_upload` feature. Contains structs and impl blocks related to uploading files to remote.it.
+//!
+//! On the docs page of this module, you can only see the builder structs for the functions.
+//!
+//! Please see [`R3Client`] for the actual functions you can call.
+
 use std::path::PathBuf;
 use bon::{bon, builder};
 

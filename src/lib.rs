@@ -47,7 +47,7 @@ pub use credentials_loader::{CredentialsLoaderError, CredentialProfiles};
 pub mod operations;
 
 #[cfg(feature = "file_upload")]
-mod api_file_upload;
+pub mod file_upload;
 
 /// Base path for the remote.it API.
 pub const BASE_URL: &str = "https://api.remote.it";

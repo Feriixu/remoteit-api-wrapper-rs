@@ -30,7 +30,7 @@ need_stdout = false
 [jobs.clippy-all]
 command = [
     "cargo", "clippy",
-    "--features", "full",
+    "--all-features",
     "--all-targets",
     "--color", "always",
 ]
