@@ -28,7 +28,7 @@ impl R3Client {
     /// - Any error that occurs during the request.
     /// - Any error that occurs during deserialization of the response.
     pub async fn send_remoteit_graphql_request_async<V: Serialize, R: for<'a> Deserialize<'a>>(
-        self,
+        &self,
         query_body: &QueryBody<V>,
     ) -> Result<Response<R>, Box<dyn Error>> {
         let date = get_date();
@@ -58,7 +58,7 @@ impl R3Client {
     /// Get a list of files that were uploaded to remote.it.
     #[builder]
     pub async fn get_files_async(
-        self,
+        &self,
     ) -> Result<Response<get_files::ResponseData>, Box<dyn Error>> {
         let request_body = GetFiles::build_query(get_files::Variables {});
         self.send_remoteit_graphql_request_async(&request_body)
@@ -68,7 +68,7 @@ impl R3Client {
     /// Delete a file from remote.it. Deletes all versions of the file.
     #[builder]
     pub async fn delete_file_async(
-        self,
+        &self,
         /// The ID of the file to delete.
         /// You can get this from the response of [`R3Client::get_files()`].
         file_id: String,
@@ -81,7 +81,7 @@ impl R3Client {
     /// Delete a version of a file from remote.it. (Not the whole file)
     #[builder]
     pub async fn delete_file_version_async(
-        self,
+        &self,
         /// The ID of the file version to delete.
         /// You can get this from the response of [`R3Client::get_files()`].
         file_version_id: String,
@@ -95,7 +95,7 @@ impl R3Client {
     /// Start scripting jobs on one or more devices.
     #[builder]
     pub async fn start_job_async(
-        self,
+        &self,
         /// The ID of the script file to run.
         /// Note that this needs to be an executable file.
         /// Get a list of files using [`R3Client::get_files()`].
@@ -120,7 +120,7 @@ impl R3Client {
     /// Cancel a job. See remote.it docs on more information on when jobs can be cancelled.
     #[builder]
     pub async fn cancel_job_async(
-        self,
+        &self,
         /// The ID of the job to cancel.
         /// You get this after starting a job using [`R3Client::start_job()`].
         job_id: String,
@@ -133,7 +133,7 @@ impl R3Client {
     /// Get a list of jobs that were started on remote.it.
     #[builder]
     pub async fn get_jobs_async(
-        self,
+        &self,
         /// Optional organization ID for org context.
         org_id: Option<String>,
         /// Optional limit how many results are returned. It is highly recommended to set a limit, because this query can take quite a while otherwise.
@@ -160,7 +160,7 @@ impl R3Client {
     /// Get a list of application types that are available on remote.it.
     #[builder]
     pub async fn get_application_types_async(
-        self,
+        &self,
     ) -> Result<Response<get_application_types::ResponseData>, Box<dyn Error>> {
         let request_body = GetApplicationTypes::build_query(get_application_types::Variables {});
         self.send_remoteit_graphql_request_async(&request_body)
@@ -170,7 +170,7 @@ impl R3Client {
     /// Get a list of devices.
     #[builder]
     pub async fn get_devices_async(
-        self,
+        &self,
         /// Optional organization ID for org context.
         org_id: Option<String>,
         /// Optional limit for the number of devices to return.
