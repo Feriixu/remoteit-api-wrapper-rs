@@ -1,6 +1,6 @@
 [package]
 name = "remoteit-api"
-version = "0.8.0"
+version = "0.8.1"
 edition = "2021"
 authors = ["Feriixu <remoteit-api.9iois@passmail.net>"]
 description = "A wrapper around the Remote.it GraphQL API, also implementing the custom request signing."

@@ -33,7 +33,7 @@ pub fn create_signature(key: &[u8], message: &str) -> String {
 /// # Example
 /// ```
 /// use reqwest::Method;
-/// use remoteit_api::credentials::Credentials;
+/// use remoteit_api::Credentials;
 /// use remoteit_api::GRAPHQL_PATH;
 /// let credentials = Credentials::load_from_disk().call().unwrap().take_profile("default").unwrap().unwrap();
 /// let date = remoteit_api::auth::get_date();

@@ -12,7 +12,7 @@ use bon::bon;
 /// # Example
 /// You can directly create a new [`Credentials`] struct using the builder pattern:
 /// ```
-/// # use remoteit_api::credentials::Credentials;
+/// # use remoteit_api::Credentials;
 /// let credentials = Credentials::builder()
 ///     .r3_access_key_id("foo")
 ///     .r3_secret_access_key("YmFy")
@@ -20,7 +20,7 @@ use bon::bon;
 /// ```
 /// If you enable the `credentials_loader` feature, you can also load the credentials from the default, or a custom file:
 /// ```
-/// # use remoteit_api::credentials::Credentials;
+/// # use remoteit_api::Credentials;
 /// let creds_from_default_loc = Credentials::load_from_disk().call().unwrap();
 /// let creds_from_custom_loc = Credentials::load_from_disk().custom_credentials_path(".env.remoteit").call().unwrap();
 /// ```
@@ -45,7 +45,7 @@ impl Credentials {
     ///
     /// # Example
     /// ```
-    /// # use remoteit_api::credentials::Credentials;
+    /// # use remoteit_api::Credentials;
     /// let credentials = Credentials::builder()
     ///     .r3_access_key_id("foo")
     ///     .r3_secret_access_key("YmFy")

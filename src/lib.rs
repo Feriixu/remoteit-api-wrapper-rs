@@ -31,11 +31,13 @@ pub mod api_blocking;
 // If neither the `async` nor `blocking` features are enabled, then the `auth` module is not needed.
 #[cfg(any(feature = "async", feature = "blocking"))]
 pub mod auth;
+
 mod credentials;
 pub use credentials::Credentials;
 
 #[cfg(feature = "credentials_loader")]
 mod credentials_loader;
+#[cfg(feature = "credentials_loader")]
 pub use credentials_loader::{CredentialsLoaderError, CredentialProfiles};
 
 pub mod operations;

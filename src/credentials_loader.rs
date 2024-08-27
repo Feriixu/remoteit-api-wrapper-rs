@@ -99,7 +99,7 @@ impl Credentials {
     /// # Example
     /// You can load credentials from the default path (`~/.remoteit/credentials` on Unix-like), or provide a custom path.
     /// ```
-    /// # use remoteit_api::credentials::Credentials;
+    /// # use remoteit_api::Credentials;
     /// let credentials_file = Credentials::load_from_disk()
     ///     .custom_credentials_path("path/to/file") // Optional
     ///     .call();
@@ -107,7 +107,7 @@ impl Credentials {
     /// You can also pass a PathBuf, or anything that implements [`Into<PathBuf>`]
     /// ```
     /// # use std::path::PathBuf;
-    /// # use remoteit_api::credentials::Credentials;
+    /// # use remoteit_api::Credentials;
     /// let credentials_file = Credentials::load_from_disk()
     ///     .custom_credentials_path(PathBuf::from("path/to/file")) // Optional
     ///     .call();
