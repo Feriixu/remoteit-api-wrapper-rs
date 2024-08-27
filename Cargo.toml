@@ -1,6 +1,6 @@
 [package]
 name = "remoteit-api"
-version = "0.8.1"
+version = "0.9.0"
 edition = "2021"
 authors = ["Feriixu <remoteit-api.9iois@passmail.net>"]
 description = "A wrapper around the Remote.it GraphQL API, also implementing the custom request signing."
@@ -9,8 +9,10 @@ repository = "https://github.com/Feriixu/remoteit-api-wrapper-rs"
 keywords = ["remoteit", "api", "wrapper", "graphql", "client"]
 categories = ["api-bindings"]
 
+
 [package.metadata.docs.rs]
 all-features = true
+
 
 [features]
 default = []
@@ -20,11 +22,12 @@ credentials_loader = ["dep:dirs", "dep:config"]
 blocking = ["dep:reqwest", "reqwest/blocking"]
 # Enables the async API, which is used to make async requests to the remote.it API.
 async = ["dep:reqwest"]
-
 native-tls-vendored = ["reqwest/native-tls-vendored"]
+
 
 [lints.rust]
 missing_docs = "deny"
+
 
 [lints.clippy]
 pedantic = "warn"
@@ -47,6 +50,7 @@ graphql_client = "0.14.0"
 reqwest = { version = "0.12.5", features = ["json", "http2", "default-tls"], default-features = false, optional = true}
 config = { version = "0.14.0", features = ["ini"], optional = true, default-features = false }
 dirs = { version = "5.0.1", optional = true }
+
 
 [dev-dependencies]
 tempfile = "3.12.0"

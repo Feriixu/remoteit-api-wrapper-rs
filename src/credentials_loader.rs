@@ -84,6 +84,16 @@ impl CredentialProfiles {
     pub fn is_empty(&self) -> bool {
         self.profiles.is_empty()
     }
+
+    /// # Returns
+    /// A list of Strings containing the names of the profiles in the inner [`HashMap`].
+    /// The order of the profiles is not guaranteed.
+    ///
+    /// # Warning
+    /// This doesn't mean that the profiles are valid (valid base64 encoded secret), only that they exist.
+    pub fn available_profiles(&self) -> Vec<String> {
+        self.profiles.keys().cloned().collect()
+    }
 }
 
 /// Impl block for credentials_loader related functions.
@@ -141,6 +151,7 @@ impl Credentials {
 mod tests {
     use crate::credentials::Credentials;
     use std::io::Write;
+    use crate::CredentialsLoaderError;
 
     #[test]
     fn test_load_from_disk_empty() {
@@ -203,5 +214,67 @@ mod tests {
         let profile = credentials.take_profile("other").unwrap().unwrap();
         assert_eq!(profile.r3_access_key_id, "baz");
         assert_eq!(profile.r3_secret_access_key, "YmFy");
+    }
+
+    #[test]
+    fn test_load_from_disk_invalid_base64() {
+        let credentials = r"
+            [default]
+            R3_ACCESS_KEY_ID=foo
+            R3_SECRET_ACCESS_KEY=bar
+        ";
+        let mut file = tempfile::NamedTempFile::new().unwrap();
+        file.write_all(credentials.as_bytes()).unwrap();
+
+        let mut credentials = Credentials::load_from_disk()
+            .custom_credentials_path(file.path().to_path_buf())
+            .call()
+            .unwrap();
+
+        let result = credentials.take_profile("default");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_load_from_disk_invalid_file() {
+        let credentials = r"
+            foobar
+        ";
+
+        let mut file = tempfile::NamedTempFile::new().unwrap();
+        file.write_all(credentials.as_bytes()).unwrap();
+
+        let result = Credentials::load_from_disk()
+            .custom_credentials_path(file.path().to_path_buf())
+            .call();
+
+        assert!(result.is_err());
+        assert!(matches!(result.unwrap_err(), CredentialsLoaderError::CredentialsParse(_)));
+    }
+
+    #[test]
+    fn test_get_available_profiles() {
+        let credentials = r"
+            [default]
+            R3_ACCESS_KEY_ID=foo
+            R3_SECRET_ACCESS_KEY=YmFy
+
+            [other]
+            R3_ACCESS_KEY_ID=baz
+            R3_SECRET_ACCESS_KEY=YmFy
+        ";
+
+        let mut file = tempfile::NamedTempFile::new().unwrap();
+        file.write_all(credentials.as_bytes()).unwrap();
+
+        let credentials = Credentials::load_from_disk()
+            .custom_credentials_path(file.path().to_path_buf())
+            .call()
+            .unwrap();
+
+        let profiles = credentials.available_profiles();
+        assert_eq!(profiles.len(), 2);
+        assert!(profiles.contains(&"default".to_string()));
+        assert!(profiles.contains(&"other".to_string()));
     }
 }
