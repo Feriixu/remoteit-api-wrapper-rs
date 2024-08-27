@@ -1,0 +1,39 @@
+#Query the organization and its members
+#Returns ID that can be used in subsequent queries
+#and each members role
+
+query GetOwnedOrganization {
+    login {
+        organization {
+            # this is your organization, not any that you belong to as a member
+            id
+            name
+            created
+            domain
+            color
+            roles {
+                id
+                name
+                permissions
+                created
+                access
+                system
+                updated
+            }
+            members {
+                user {
+                    id
+                    email
+                }
+                customRole {
+                    id
+                    name
+                    system
+                    access
+                }
+                license
+                created
+            }
+        }
+    }
+}

@@ -5,11 +5,7 @@
 //! Please see [`R3Client`] for the actual functions you can call.
 
 use crate::auth::{build_auth_header, get_date};
-use crate::operations::{
-    cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files,
-    get_jobs, start_job, CancelJob, DeleteFile, DeleteFileVersion, GetApplicationTypes, GetDevices,
-    GetFiles, GetJobs, StartJob,
-};
+use crate::operations::{cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files, get_jobs, get_organization_self_membership, get_owned_organization, start_job, CancelJob, DeleteFile, DeleteFileVersion, GetApplicationTypes, GetDevices, GetFiles, GetJobs, GetOrganizationSelfMembership, GetOwnedOrganization, StartJob};
 use crate::{R3Client, BASE_URL, GRAPHQL_PATH};
 use bon::bon;
 use graphql_client::{GraphQLQuery, QueryBody, Response};
@@ -146,7 +142,30 @@ impl R3Client {
     }
 
     // endregion
+    // region Organizations
+    /// Get data on your own organization, which belongs to the current user.
+    /// This Organization may or may not exist. You can create and configure your organization through the remote.it Web UI.
+    ///
+    /// # Returns
+    /// Data on your organization, if you have one.
+    #[builder]
+    pub fn get_owned_organization(
+        &self,
+    ) -> Result<Response<get_owned_organization::ResponseData>, Box<dyn Error>> {
+        let request_body = GetOwnedOrganization::build_query(get_owned_organization::Variables {});
+        self.send_remoteit_graphql_request(&request_body)
+    }
 
+    /// Get a list of organization memberships for the current user.
+    ///
+    /// # Returns
+    /// A list of organizations that you are a member of.
+    #[builder]
+    pub fn get_organization_self_membership(&self) -> Result<Response<get_organization_self_membership::ResponseData>, Box<dyn Error>> {
+        let request_body = GetOrganizationSelfMembership::build_query(get_organization_self_membership::Variables {});
+        self.send_remoteit_graphql_request(&request_body)
+    }
+    // endregion
     // region Devices and Services
 
     /// Get a list of application types that are available on remote.it.

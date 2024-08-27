@@ -1,0 +1,23 @@
+#Retrieves all organizations and roles a user is a member of
+
+query GetOrganizationSelfMembership {
+    login {
+        membership {
+            # This is your role and permissions
+            customRole {
+                id
+                name
+                permissions
+            }
+            organization {
+                id
+                name
+                account {
+                    id
+                    email
+                }
+                created
+            }
+        }
+    }
+}

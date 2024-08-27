@@ -67,7 +67,23 @@ pub struct CancelJob;
 )]
 pub struct GetJobs;
 // endregion
+// region Organizations
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.json",
+    query_path = "src/graphql/GetOwnedOrganization.graphql",
+    response_derives = "Debug"
+)]
+pub struct GetOwnedOrganization;
 
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.json",
+    query_path = "src/graphql/GetOrganizationSelfMembership.graphql",
+    response_derives = "Debug"
+)]
+pub struct GetOrganizationSelfMembership;
+// endregion
 // region Devices and Services
 
 /// Query, which retrieves a list of services, that are available on remote.it.
