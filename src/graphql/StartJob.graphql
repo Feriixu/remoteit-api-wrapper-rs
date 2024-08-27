@@ -1,4 +1,4 @@
-mutation StartJob($fileId: String!, $deviceIds: [String!]!, $arguments: [ArgumentInput!]) {
+mutation StartJob($fileId: String!, $deviceIds: [String!]!, $arguments: [ArgumentInput!]!) {
     startJob(
         fileId: $fileId,
         #Device IDs OR Tags are used to identify the devices for the job. If both device IDs and tags are passed, device Ids will be used.
