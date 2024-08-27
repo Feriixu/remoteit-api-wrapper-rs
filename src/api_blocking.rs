@@ -106,6 +106,7 @@ impl R3Client {
         /// Arguments to pass to the script.
         /// These are optional.
         /// For more information on script arguments please consult the remote.it API documentation.
+        #[builder(default)]
         arguments: Vec<start_job::ArgumentInput>,
     ) -> Result<Response<start_job::ResponseData>, Box<dyn Error>> {
         let request_body = StartJob::build_query(start_job::Variables {
