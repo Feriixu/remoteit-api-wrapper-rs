@@ -2,7 +2,7 @@
 //!
 //! On the docs page of this module, you can only see the builder structs for the functions.
 //!
-//! Please see [`R3Client`] for the actual functions you can call.
+//! Please see [`R3Client`](crate::R3Client) for the actual functions you can call.
 
 use bon::{bon, builder};
 use std::path::PathBuf;
