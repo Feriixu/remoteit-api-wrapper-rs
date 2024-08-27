@@ -10,7 +10,7 @@ use std::path::PathBuf;
 /// Errors that can occur during the loading of credentials from disk.
 #[allow(missing_docs)]
 #[derive(thiserror::Error, Debug)]
-pub enum Error {
+pub enum CredentialsLoaderError {
     #[error("The user's home directory could not be found. Please refer to the `dirs` crate for more information.")]
     HomeDirNotFound,
     #[error("The credentials file could not be loaded: {0}")]
@@ -93,8 +93,8 @@ impl Credentials {
     /// The default location is `~/.remoteit/credentials`.
     ///
     /// # Errors
-    /// * [`Error::HomeDirNotFound`], when the [`dirs`] create cannot find the user's home directory.
-    /// * [`Error::CouldNotReadCredentials`], when the credentials file could not be parsed by the [`config`] crate.
+    /// * [`CredentialsLoaderError::HomeDirNotFound`], when the [`dirs`] create cannot find the user's home directory.
+    /// * [`CredentialsLoaderError::CouldNotReadCredentials`], when the credentials file could not be parsed by the [`config`] crate.
     ///
     /// # Example
     /// You can load credentials from the default path (`~/.remoteit/credentials` on Unix-like), or provide a custom path.
@@ -115,10 +115,10 @@ impl Credentials {
     #[builder]
     pub fn load_from_disk(
         custom_credentials_path: Option<PathBuf>,
-    ) -> Result<CredentialProfiles, Error> {
+    ) -> Result<CredentialProfiles, CredentialsLoaderError> {
         let credentials_path = custom_credentials_path.unwrap_or(
             dirs::home_dir()
-                .ok_or(Error::HomeDirNotFound)?
+                .ok_or(CredentialsLoaderError::HomeDirNotFound)?
                 .join(".remoteit")
                 .join("credentials"),
         );

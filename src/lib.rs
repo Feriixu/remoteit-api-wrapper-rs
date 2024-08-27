@@ -20,7 +20,6 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![cfg_attr(docsrs, doc(cfg(all())))]
 
-use crate::credentials::Credentials;
 use bon::builder;
 
 #[cfg(feature = "async")]
@@ -32,9 +31,13 @@ pub mod api_blocking;
 // If neither the `async` nor `blocking` features are enabled, then the `auth` module is not needed.
 #[cfg(any(feature = "async", feature = "blocking"))]
 pub mod auth;
-pub mod credentials;
+mod credentials;
+pub use credentials::Credentials;
+
 #[cfg(feature = "credentials_loader")]
-pub mod credentials_loader;
+mod credentials_loader;
+pub use credentials_loader::{CredentialsLoaderError, CredentialProfiles};
+
 pub mod operations;
 
 /// Base path for the remote.it API.
@@ -52,7 +55,7 @@ pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
 /// You can create a new [`R3Client`] using the builder pattern:
 /// ```
 /// # use remoteit_api::R3Client;
-/// # use remoteit_api::credentials::Credentials;
+/// # use remoteit_api::Credentials;
 /// let credentials = Credentials::load_from_disk()
 ///     .call()
 ///     .unwrap()
