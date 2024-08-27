@@ -5,7 +5,12 @@
 //! Please see [`R3Client`] for the actual functions you can call.
 
 use crate::auth::{build_auth_header, get_date};
-use crate::operations::{cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files, get_jobs, get_organization_self_membership, get_owned_organization, start_job, CancelJob, DeleteFile, DeleteFileVersion, GetApplicationTypes, GetDevices, GetFiles, GetJobs, GetOrganizationSelfMembership, GetOwnedOrganization, StartJob};
+use crate::operations::{
+    cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files,
+    get_jobs, get_organization_self_membership, get_owned_organization, start_job, CancelJob,
+    DeleteFile, DeleteFileVersion, GetApplicationTypes, GetDevices, GetFiles, GetJobs,
+    GetOrganizationSelfMembership, GetOwnedOrganization, StartJob,
+};
 use crate::{R3Client, BASE_URL, GRAPHQL_PATH};
 use bon::bon;
 use graphql_client::{GraphQLQuery, QueryBody, Response};
@@ -53,8 +58,12 @@ impl R3Client {
 
     /// Get a list of files that were uploaded to remote.it.
     #[builder]
-    pub fn get_files(&self) -> Result<Response<get_files::ResponseData>, Box<dyn Error>> {
-        let request_body = GetFiles::build_query(get_files::Variables {});
+    pub fn get_files(
+        &self,
+        /// Optional organization ID for org context.
+        org_id: Option<String>,
+    ) -> Result<Response<get_files::ResponseData>, Box<dyn Error>> {
+        let request_body = GetFiles::build_query(get_files::Variables { org_id });
         self.send_remoteit_graphql_request(&request_body)
     }
 
@@ -161,8 +170,12 @@ impl R3Client {
     /// # Returns
     /// A list of organizations that you are a member of.
     #[builder]
-    pub fn get_organization_self_membership(&self) -> Result<Response<get_organization_self_membership::ResponseData>, Box<dyn Error>> {
-        let request_body = GetOrganizationSelfMembership::build_query(get_organization_self_membership::Variables {});
+    pub fn get_organization_self_membership(
+        &self,
+    ) -> Result<Response<get_organization_self_membership::ResponseData>, Box<dyn Error>> {
+        let request_body = GetOrganizationSelfMembership::build_query(
+            get_organization_self_membership::Variables {},
+        );
         self.send_remoteit_graphql_request(&request_body)
     }
     // endregion

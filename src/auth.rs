@@ -1,7 +1,6 @@
 //! Contains functions related to request signing for the remote.it API.
 //! They are used by this lib, but you can also use them to implement your own abstraction.
 
-
 use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use base64::Engine;
 use bon::builder;

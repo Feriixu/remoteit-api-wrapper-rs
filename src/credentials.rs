@@ -34,8 +34,6 @@ pub struct Credentials {
     pub(crate) key: Vec<u8>,
 }
 
-
-
 #[bon]
 impl Credentials {
     /// Validated the given secret access key and creates a new [`Credentials`] struct.

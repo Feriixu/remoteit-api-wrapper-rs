@@ -1,27 +1,29 @@
-query GetFiles {
+query GetFiles($orgId: String) {
     login {
-        files {
-            owner {
-                email
-                id
-            }
-            id
-            name
-            shortDesc
-            longDesc
-            executable
-            created
-            updated
-            versions {
-                items {
+        account(id: $orgId) {
+            files {
+                owner {
+                    email
                     id
-                    created
-                    version
-                    arguments {
-                        name
-                        order
-                        options
-                        argumentType
+                }
+                id
+                name
+                shortDesc
+                longDesc
+                executable
+                created
+                updated
+                versions {
+                    items {
+                        id
+                        created
+                        version
+                        arguments {
+                            name
+                            order
+                            options
+                            argumentType
+                        }
                     }
                 }
             }

@@ -67,7 +67,8 @@ impl CredentialProfiles {
         Credentials::builder()
             .r3_access_key_id(&unverified_credentials.r3_access_key_id)
             .r3_secret_access_key(&unverified_credentials.r3_secret_access_key)
-            .build().map(Some)
+            .build()
+            .map(Some)
     }
 
     /// # Returns
@@ -150,8 +151,8 @@ impl Credentials {
 #[cfg(test)]
 mod tests {
     use crate::credentials::Credentials;
-    use std::io::Write;
     use crate::CredentialsLoaderError;
+    use std::io::Write;
 
     #[test]
     fn test_load_from_disk_empty() {
@@ -249,7 +250,10 @@ mod tests {
             .call();
 
         assert!(result.is_err());
-        assert!(matches!(result.unwrap_err(), CredentialsLoaderError::CredentialsParse(_)));
+        assert!(matches!(
+            result.unwrap_err(),
+            CredentialsLoaderError::CredentialsParse(_)
+        ));
     }
 
     #[test]

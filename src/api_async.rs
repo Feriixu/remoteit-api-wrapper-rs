@@ -5,7 +5,11 @@
 //! Please see [`R3Client`] for the actual functions you can call.
 
 use crate::auth::{build_auth_header, get_date};
-use crate::operations::{cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files, get_jobs, get_owned_organization, start_job, CancelJob, DeleteFile, DeleteFileVersion, GetApplicationTypes, GetDevices, GetFiles, GetJobs, GetOwnedOrganization, StartJob};
+use crate::operations::{
+    cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files,
+    get_jobs, get_owned_organization, start_job, CancelJob, DeleteFile, DeleteFileVersion,
+    GetApplicationTypes, GetDevices, GetFiles, GetJobs, GetOwnedOrganization, StartJob,
+};
 use crate::{R3Client, BASE_URL, GRAPHQL_PATH};
 use bon::bon;
 use graphql_client::{GraphQLQuery, QueryBody, Response};
@@ -55,8 +59,10 @@ impl R3Client {
     #[builder]
     pub async fn get_files_async(
         &self,
+        /// Optional organization ID for org context.
+        org_id: Option<String>,
     ) -> Result<Response<get_files::ResponseData>, Box<dyn Error>> {
-        let request_body = GetFiles::build_query(get_files::Variables {});
+        let request_body = GetFiles::build_query(get_files::Variables { org_id });
         self.send_remoteit_graphql_request_async(&request_body)
             .await
     }
@@ -161,7 +167,8 @@ impl R3Client {
         &self,
     ) -> Result<Response<get_owned_organization::ResponseData>, Box<dyn Error>> {
         let request_body = GetOwnedOrganization::build_query(get_owned_organization::Variables {});
-        self.send_remoteit_graphql_request_async(&request_body).await
+        self.send_remoteit_graphql_request_async(&request_body)
+            .await
     }
     // endregion
     // region Devices and Services

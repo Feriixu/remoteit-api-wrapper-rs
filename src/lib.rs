@@ -20,9 +20,11 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![cfg_attr(docsrs, doc(cfg(all())))]
 
-#[cfg(all(feature = "file_upload", not(any(feature = "async", feature = "blocking"))))]
+#[cfg(all(
+    feature = "file_upload",
+    not(any(feature = "async", feature = "blocking"))
+))]
 compile_error!("The `file_upload` feature is useless on it's own. You also need to enable one of: `async`, `blocking` ");
-
 
 use bon::builder;
 
@@ -42,7 +44,7 @@ pub use credentials::Credentials;
 #[cfg(feature = "credentials_loader")]
 mod credentials_loader;
 #[cfg(feature = "credentials_loader")]
-pub use credentials_loader::{CredentialsLoaderError, CredentialProfiles};
+pub use credentials_loader::{CredentialProfiles, CredentialsLoaderError};
 
 pub mod operations;
 
