@@ -67,9 +67,10 @@ pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
 /// ```
 /// # use remoteit_api::R3Client;
 /// # use remoteit_api::Credentials;
-/// let credentials = Credentials::load_from_disk()
+/// let credentials: Credentials = Credentials::load_from_disk()
+///     .custom_credentials_path(".env.remoteit")
 ///     .call()
-///     .unwrap()
+///     .expect("Couldn't load credentials!")
 ///     .take_profile("default")
 ///     .expect("Couldn't parse secret access key!")
 ///     .expect("Profile with given name does not exist!");

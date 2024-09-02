@@ -35,7 +35,13 @@ pub fn create_signature(key: &[u8], message: &str) -> String {
 /// use reqwest::Method;
 /// use remoteit_api::Credentials;
 /// use remoteit_api::GRAPHQL_PATH;
-/// let credentials = Credentials::load_from_disk().call().unwrap().take_profile("default").unwrap().unwrap();
+/// let credentials: Credentials = Credentials::load_from_disk()
+///     .custom_credentials_path(".env.remoteit")
+///     .call()
+///     .expect("Couldn't load credentials!")
+///     .take_profile("default")
+///     .expect("Couldn't parse secret access key!")
+///     .expect("Profile with given name does not exist!");
 /// let date = remoteit_api::auth::get_date();
 /// let auth_header = remoteit_api::auth::build_auth_header()
 ///     .key_id(credentials.access_key_id())

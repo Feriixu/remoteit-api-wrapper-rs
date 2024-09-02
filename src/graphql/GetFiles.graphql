@@ -14,16 +14,19 @@ query GetFiles($orgId: String) {
                 created
                 updated
                 versions {
-                    items {
+                    id
+                    created
+                    arguments {
                         id
+                        argumentType
                         created
-                        version
-                        arguments {
-                            name
-                            order
-                            options
-                            argumentType
-                        }
+                        desc
+                        name
+                        options
+                        order
+                    }
+                    file {
+                        id
                     }
                 }
             }

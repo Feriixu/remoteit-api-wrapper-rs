@@ -20,11 +20,12 @@ query GetJobs($orgId: String, $limit: Int, $jobIds: [ID!], $statuses: [JobStatus
                     # One of the following FAILED,WAITING,RUNNING,SUCCESS,CANCELLED
                     status
                     #tags associated with job
-                    tag {
-                        values
-                        operator
+                    tags {
+                        name
+                        created
+                        color
                     }
-
+                    tagOperator
                     #ANY/ALL (i.e. or/and)
                     fileVersion {
                         id
