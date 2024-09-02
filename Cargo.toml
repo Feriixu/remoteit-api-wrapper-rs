@@ -1,10 +1,10 @@
 [package]
 name = "remoteit-api"
-version = "0.12.0"
+version = "0.12.1"
 edition = "2021"
 authors = ["Feriixu <remoteit-api.9iois@passmail.net>"]
 description = "A wrapper around the Remote.it GraphQL API, also implementing the custom request signing."
-license = "LGPL-3.0-or-later"
+license = "MIT OR Apache-2.0"
 repository = "https://github.com/Feriixu/remoteit-api-wrapper-rs"
 keywords = ["remoteit", "api", "wrapper", "graphql", "client"]
 categories = ["api-bindings"]
