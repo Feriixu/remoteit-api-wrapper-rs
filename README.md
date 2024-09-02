@@ -3,6 +3,8 @@
 [![Crates.io](https://img.shields.io/crates/v/remoteit-api)](https://crates.io/crates/remoteit-api)
 [![License](https://img.shields.io/crates/l/remoteit-api)](https://crates.io/crates/remoteit-api)
 [![Docs.rs](https://docs.rs/remoteit-api/badge.svg)](https://docs.rs/remoteit-api)
+![Crates.io MSRV](https://img.shields.io/crates/msrv/remoteit-api)
+
 
 ## 🚧 Under construction 🚧
 This crate is currently unstable. The developer API is subject to breaking changes until v1.0.0.
