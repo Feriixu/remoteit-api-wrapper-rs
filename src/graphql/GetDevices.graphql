@@ -6,10 +6,10 @@
 #which users have accounts
 #tags and attributes associated with each device
 
-query GetDevices($orgId: String, $limit: Int, $offset: Int) {
+query GetDevices($orgId: String, $limit: Int, $offset: Int, $state: String) {
     login {
         account(id: $orgId) {
-            devices (size: $limit, from: $offset) {
+            devices (size: $limit, from: $offset, state: $state) {
                 hasMore
                 total
                 items {

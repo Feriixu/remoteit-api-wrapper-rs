@@ -1,5 +1,6 @@
 #![allow(missing_docs)]
 
+use std::fmt::Display;
 use chrono::Local;
 use graphql_client::GraphQLQuery;
 
@@ -104,6 +105,29 @@ pub struct GetApplicationTypes;
     response_derives = "Debug"
 )]
 pub struct GetDevices;
+/// Represents the state of a device.
+/// This is a implemented as a custom type, because in the GraphQL schema this is just a string.
+///
+/// This enum is intended to be used with the [`R3Client::get_devices`](crate::R3Client::get_devices) and [`R3Client::get_devices_async`](crate::R3Client::get_devices_async) functions.
+///
+/// - [`DeviceState::Active`] corresponds to the device being online.
+/// - [`DeviceState::Inactive`] corresponds to the device being offline.
+///
+/// The online-state of a device is also represented in the `online` field of the device. (when querying devices)
+pub enum DeviceState {
+    /// The device is online.
+    Active,
+    /// The device is offline.
+    Inactive,
+}
+impl Display for DeviceState {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            DeviceState::Active => write!(f, "active"),
+            DeviceState::Inactive => write!(f, "inactive"),
+        }
+    }
+}
 
 /// Query, which retrieves a download link for a CSV file, that contains information about devices.
 #[derive(GraphQLQuery)]
