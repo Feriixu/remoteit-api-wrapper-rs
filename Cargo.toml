@@ -59,7 +59,7 @@ itertools = "0.13.0"
 ring = "0.17.8"
 hmac = "0.13.0-pre.4"
 thiserror = "1.0.63"
-bon = "1.2.1"
+bon = "2.2.0"
 serde_json = "1.0.125"
 graphql_client = "0.14.0"
 tokio = { version = "1.39.3", optional = true, default-features = false, features = ["fs"] }
