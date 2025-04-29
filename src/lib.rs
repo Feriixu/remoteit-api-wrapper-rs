@@ -13,7 +13,7 @@
 //! - Enable `blocking` to use the blocking versions of the API functions from the [`api_blocking`] module.
 //! - Enable `async` to use the asynchronous versions of the API funcitons from the [`api_async`] module.
 //! - Enable `credentials_loader` to use the [`Credentials::load_from_disk`] function.
-//!     This is gated behind a feature, because it introduces additional dependencies.
+//!   This is gated behind a feature, because it introduces additional dependencies.
 //!
 
 // Enable all features for the documentation tests
@@ -26,7 +26,7 @@
 ))]
 compile_error!("The `file_upload` feature is useless on it's own. You also need to enable one of: `async`, `blocking` ");
 
-use bon::builder;
+use bon::Builder;
 
 #[cfg(feature = "async")]
 pub mod api_async;
@@ -78,7 +78,7 @@ pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
 /// // Start making API calls
 /// let devices = client.get_devices().call().unwrap();
 /// ```
-#[builder]
+#[derive(Builder, Clone, Debug)]
 pub struct R3Client {
     credentials: Credentials,
 }

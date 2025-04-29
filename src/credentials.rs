@@ -14,24 +14,25 @@ use bon::bon;
 /// ```
 /// # use remoteit_api::Credentials;
 /// let credentials = Credentials::builder()
-///     .r3_access_key_id("foo")
-///     .r3_secret_access_key("YmFy")
+///     .r3_access_key_id("foo".to_owned())
+///     .r3_secret_access_key("YmFy".to_owned())
 ///     .build();
 /// ```
 /// If you enable the `credentials_loader` feature, you can also load the credentials from the default, or a custom file:
 /// ```
+/// # use std::path::PathBuf;
 /// # use remoteit_api::Credentials;
 /// let creds_from_default_loc = Credentials::load_from_disk().call().unwrap();
-/// let creds_from_custom_loc = Credentials::load_from_disk().custom_credentials_path(".env.remoteit").call().unwrap();
+/// let creds_from_custom_loc = Credentials::load_from_disk().custom_credentials_path(PathBuf::from(".env.remoteit")).call().unwrap();
 /// ```
 #[derive(
-    Debug, Clone, PartialOrd, PartialEq, Eq, Ord, Hash, serde::Deserialize, serde::Serialize,
+    Debug, Clone, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize,
 )]
 pub struct Credentials {
-    pub(crate) r3_access_key_id: String,
-    pub(crate) r3_secret_access_key: String,
+    r3_access_key_id: String,
+    r3_secret_access_key: String,
     #[serde(skip)] // Don't want to serialize this one
-    pub(crate) key: Vec<u8>,
+    key: Vec<u8>,
 }
 
 #[bon]
@@ -45,8 +46,8 @@ impl Credentials {
     /// ```
     /// # use remoteit_api::Credentials;
     /// let credentials = Credentials::builder()
-    ///     .r3_access_key_id("foo")
-    ///     .r3_secret_access_key("YmFy")
+    ///     .r3_access_key_id("foo".to_owned())
+    ///     .r3_secret_access_key("YmFy".to_owned())
     ///     .build();
     /// ```
     #[builder]
@@ -71,12 +72,14 @@ impl Credentials {
 
     /// # Returns
     /// A reference to the r3_access_key_id
+    #[allow(clippy::must_use_candidate)]
     pub fn access_key_id(&self) -> &str {
         &self.r3_access_key_id
     }
 
     /// # Returns
     /// The base64 encoded r3_secret_access_key
+    #[allow(clippy::must_use_candidate)]
     pub fn secret_access_key(&self) -> &str {
         &self.r3_secret_access_key
     }
@@ -89,12 +92,46 @@ mod tests {
     #[test]
     fn test_credentials_builder() {
         let credentials = Credentials::builder()
-            .r3_access_key_id("foo")
-            .r3_secret_access_key("YmFy")
+            .r3_access_key_id("foo".to_owned())
+            .r3_secret_access_key("YmFy".to_owned())
             .build()
             .unwrap();
 
         assert_eq!(credentials.r3_access_key_id, "foo");
         assert_eq!(credentials.r3_secret_access_key, "YmFy");
+    }
+
+    #[test]
+    fn test_get_key() {
+        let key = vec![1, 2, 3, 4];
+        let credentials = Credentials::builder()
+            .r3_access_key_id(String::new())
+            .r3_secret_access_key(BASE64_STANDARD.encode(&key))
+            .build()
+            .unwrap();
+
+        assert_eq!(key.as_slice(), credentials.key());
+    }
+
+    #[test]
+    fn test_get_access_key_id() {
+        let credentials = Credentials::builder()
+            .r3_access_key_id("foo".to_string())
+            .r3_secret_access_key("YmFy".to_owned())
+            .build()
+            .unwrap();
+
+        assert_eq!("foo", credentials.access_key_id());
+    }
+
+    #[test]
+    fn test_get_secret_access_key() {
+        let credentials = Credentials::builder()
+            .r3_access_key_id(String::new())
+            .r3_secret_access_key("YmFy".to_owned())
+            .build()
+            .unwrap();
+
+        assert_eq!(credentials.secret_access_key(), "YmFy");
     }
 }

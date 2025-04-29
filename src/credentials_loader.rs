@@ -20,7 +20,7 @@ pub enum CredentialsLoaderError {
 }
 
 /// This is how the credentials are saved in the file.
-/// Unverified, because the r3_secret_access_key must be valid base64, but is not validated while parsing the file.
+/// Unverified, because the `r3_secret_access_key` must be valid base64, but is not validated while parsing the file.
 #[derive(
     Debug, Clone, PartialOrd, PartialEq, Eq, Ord, Hash, serde::Deserialize, serde::Serialize,
 )]
@@ -65,8 +65,8 @@ impl CredentialProfiles {
         };
 
         Credentials::builder()
-            .r3_access_key_id(&unverified_credentials.r3_access_key_id)
-            .r3_secret_access_key(&unverified_credentials.r3_secret_access_key)
+            .r3_access_key_id(unverified_credentials.r3_access_key_id)
+            .r3_secret_access_key(unverified_credentials.r3_secret_access_key)
             .build()
             .map(Some)
     }
@@ -92,6 +92,7 @@ impl CredentialProfiles {
     ///
     /// # Warning
     /// This doesn't mean that the profiles are valid (valid base64 encoded secret), only that they exist.
+    #[must_use]
     pub fn available_profiles(&self) -> Vec<String> {
         self.profiles.keys().cloned().collect()
     }
@@ -110,13 +111,6 @@ impl Credentials {
     /// # Example
     /// You can load credentials from the default path (`~/.remoteit/credentials` on Unix-like), or provide a custom path.
     /// ```
-    /// # use remoteit_api::Credentials;
-    /// let credentials_file = Credentials::load_from_disk()
-    ///     .custom_credentials_path("path/to/file") // Optional
-    ///     .call();
-    /// ```
-    /// You can also pass a PathBuf, or anything that implements [`Into<PathBuf>`]
-    /// ```
     /// # use std::path::PathBuf;
     /// # use remoteit_api::Credentials;
     /// let credentials_file = Credentials::load_from_disk()
@@ -125,6 +119,7 @@ impl Credentials {
     /// ```
     #[builder]
     pub fn load_from_disk(
+        #[builder(into)]
         custom_credentials_path: Option<PathBuf>,
     ) -> Result<CredentialProfiles, CredentialsLoaderError> {
         let credentials_path = custom_credentials_path.unwrap_or(
@@ -184,8 +179,8 @@ mod tests {
 
         assert_eq!(credentials.len(), 1);
         let credentials = credentials.take_profile("default").unwrap().unwrap();
-        assert_eq!(credentials.r3_access_key_id, "foo");
-        assert_eq!(credentials.r3_secret_access_key, "YmFy");
+        assert_eq!(credentials.access_key_id(), "foo");
+        assert_eq!(credentials.secret_access_key(), "YmFy");
     }
 
     #[test]
@@ -210,11 +205,11 @@ mod tests {
 
         assert_eq!(credentials.len(), 2);
         let profile = credentials.take_profile("default").unwrap().unwrap();
-        assert_eq!(profile.r3_access_key_id, "foo");
-        assert_eq!(profile.r3_secret_access_key, "YmFy");
+        assert_eq!(profile.access_key_id(), "foo");
+        assert_eq!(profile.secret_access_key(), "YmFy");
         let profile = credentials.take_profile("other").unwrap().unwrap();
-        assert_eq!(profile.r3_access_key_id, "baz");
-        assert_eq!(profile.r3_secret_access_key, "YmFy");
+        assert_eq!(profile.access_key_id(), "baz");
+        assert_eq!(profile.secret_access_key(), "YmFy");
     }
 
     #[test]

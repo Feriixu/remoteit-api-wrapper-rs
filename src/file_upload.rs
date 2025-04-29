@@ -4,18 +4,18 @@
 //!
 //! Please see [`R3Client`](crate::R3Client) for the actual functions you can call.
 
-use bon::{bon, builder};
+use bon::{bon, builder, Builder};
 use std::path::PathBuf;
 
 use crate::auth::{build_auth_header, get_date};
 
 /// Struct to hold the details of a file to be uploaded to remote.it.
-#[derive(Debug, Clone)]
-#[builder]
+#[derive(Debug, Clone, Builder)]
 pub struct FileUpload {
     /// The name of the file. This is what the file will be called in the remote.it system.
     pub file_name: String,
     /// The path to the file on the local filesystem.
+    #[builder(into)]
     pub file_path: PathBuf,
     /// Whether the file is an executable script or an asset.
     pub executable: bool,
@@ -42,7 +42,7 @@ pub struct UploadFileResponse {
     /// The User ID of the owner of the file.
     pub owner_id: String,
     /// The available arguments for this file, if it is an executable script.
-    /// See https://docs.remote.it/developer-tools/device-scripting#creating-scripts for more information.
+    /// See <https://docs.remote.it/developer-tools/device-scripting#creating-scripts> for more information.
     pub file_arguments: Vec<serde_json::Value>,
 }
 
@@ -108,8 +108,8 @@ impl crate::R3Client {
         let content_type = format!("multipart/form-data; boundary={}", form.boundary());
         let date = get_date();
         let auth_header = build_auth_header()
-            .key_id(&self.credentials.r3_access_key_id)
-            .key(&self.credentials.key)
+            .key_id(self.credentials.access_key_id())
+            .key(self.credentials.key())
             .content_type(&content_type)
             .method(&reqwest::Method::POST)
             .path(FILE_UPLOAD_PATH)
@@ -127,11 +127,11 @@ impl crate::R3Client {
         if response.status().is_success() {
             let file_upload_response = response
                 .json::<UploadFileResponse>()
-                .map_err(|e| UploadFileError::ParseJson(e))?;
+                .map_err(UploadFileError::ParseJson)?;
             Ok(file_upload_response)
         } else {
             let response: ErrorResponse =
-                response.json().map_err(|e| UploadFileError::ParseJson(e))?;
+                response.json().map_err(UploadFileError::ParseJson)?;
             Err(UploadFileError::ApiError(response))
         }
     }
@@ -195,8 +195,8 @@ impl crate::R3Client {
         let content_type = format!("multipart/form-data; boundary={}", form.boundary());
         let date = get_date();
         let auth_header = build_auth_header()
-            .key_id(&self.credentials.r3_access_key_id)
-            .key(&self.credentials.key)
+            .key_id(self.credentials.access_key_id())
+            .key(self.credentials.key())
             .content_type(&content_type)
             .method(&reqwest::Method::POST)
             .path(FILE_UPLOAD_PATH)
@@ -216,13 +216,13 @@ impl crate::R3Client {
             let file_upload_response = response
                 .json::<UploadFileResponse>()
                 .await
-                .map_err(|e| UploadFileError::ParseJson(e))?;
+                .map_err(UploadFileError::ParseJson)?;
             Ok(file_upload_response)
         } else {
             let response: ErrorResponse = response
                 .json()
                 .await
-                .map_err(|e| UploadFileError::ParseJson(e))?;
+                .map_err(UploadFileError::ParseJson)?;
             Err(UploadFileError::ApiError(response))
         }
     }

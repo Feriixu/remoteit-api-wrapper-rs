@@ -82,6 +82,7 @@ pub fn build_auth_header(
 ///
 /// # Returns
 /// A date string (now) in the format required by the remote.it API.
+#[allow(clippy::must_use_candidate)]
 pub fn get_date() -> String {
     Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string()
 }

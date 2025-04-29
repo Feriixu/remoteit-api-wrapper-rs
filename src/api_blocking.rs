@@ -30,8 +30,8 @@ impl R3Client {
     ) -> Result<Response<R>, Box<dyn Error>> {
         let date = get_date();
         let auth_header = build_auth_header()
-            .key_id(&self.credentials.r3_access_key_id)
-            .key(&self.credentials.key)
+            .key_id(self.credentials.access_key_id())
+            .key(self.credentials.key())
             .content_type("application/json")
             .method(&Method::POST)
             .path(GRAPHQL_PATH)
