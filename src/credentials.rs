@@ -2,8 +2,8 @@
 //! This is of course not the most secure way to store credentials, but it is the most convenient and recommended by remote.it.
 //! If you store your credentials in a different way, you can pass them to the functions in this module directly instead of using this module to load them.
 
-use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
+use base64::prelude::BASE64_STANDARD;
 use bon::bon;
 
 /// Credentials for the remote.it API.
@@ -25,9 +25,7 @@ use bon::bon;
 /// let creds_from_default_loc = Credentials::load_from_disk().call().unwrap();
 /// let creds_from_custom_loc = Credentials::load_from_disk().custom_credentials_path(PathBuf::from(".env.remoteit")).call().unwrap();
 /// ```
-#[derive(
-    Debug, Clone, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize)]
 pub struct Credentials {
     r3_access_key_id: String,
     r3_secret_access_key: String,

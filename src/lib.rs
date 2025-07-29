@@ -24,7 +24,9 @@
     feature = "file_upload",
     not(any(feature = "async", feature = "blocking"))
 ))]
-compile_error!("The `file_upload` feature is useless on it's own. You also need to enable one of: `async`, `blocking` ");
+compile_error!(
+    "The `file_upload` feature is useless on it's own. You also need to enable one of: `async`, `blocking` "
+);
 
 use bon::Builder;
 

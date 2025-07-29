@@ -1,8 +1,8 @@
 #![allow(missing_docs)]
 
-use std::fmt::Display;
 use chrono::Local;
 use graphql_client::GraphQLQuery;
+use std::fmt::Display;
 
 /// Define [`DateTime`] as a [`chrono::DateTime<Local>`], because it is not a built-in type in GraphQL.
 type DateTime = chrono::DateTime<Local>;

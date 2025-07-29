@@ -11,7 +11,9 @@ use std::path::PathBuf;
 #[allow(missing_docs)]
 #[derive(thiserror::Error, Debug)]
 pub enum CredentialsLoaderError {
-    #[error("The user's home directory could not be found. Please refer to the `dirs` crate for more information.")]
+    #[error(
+        "The user's home directory could not be found. Please refer to the `dirs` crate for more information."
+    )]
     HomeDirNotFound,
     #[error("The credentials file could not be loaded: {0}")]
     CouldNotReadCredentials(#[from] std::io::Error),
@@ -119,8 +121,7 @@ impl Credentials {
     /// ```
     #[builder]
     pub fn load_from_disk(
-        #[builder(into)]
-        custom_credentials_path: Option<PathBuf>,
+        #[builder(into)] custom_credentials_path: Option<PathBuf>,
     ) -> Result<CredentialProfiles, CredentialsLoaderError> {
         let credentials_path = custom_credentials_path.unwrap_or(
             dirs::home_dir()
@@ -145,8 +146,8 @@ impl Credentials {
 
 #[cfg(test)]
 mod tests {
-    use crate::credentials::Credentials;
     use crate::CredentialsLoaderError;
+    use crate::credentials::Credentials;
     use std::io::Write;
 
     #[test]

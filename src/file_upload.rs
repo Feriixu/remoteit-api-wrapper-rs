@@ -4,7 +4,7 @@
 //!
 //! Please see [`R3Client`](crate::R3Client) for the actual functions you can call.
 
-use bon::{bon, builder, Builder};
+use bon::{Builder, bon, builder};
 use std::path::PathBuf;
 
 use crate::auth::{build_auth_header, get_date};
@@ -130,8 +130,7 @@ impl crate::R3Client {
                 .map_err(UploadFileError::ParseJson)?;
             Ok(file_upload_response)
         } else {
-            let response: ErrorResponse =
-                response.json().map_err(UploadFileError::ParseJson)?;
+            let response: ErrorResponse = response.json().map_err(UploadFileError::ParseJson)?;
             Err(UploadFileError::ApiError(response))
         }
     }
@@ -219,10 +218,8 @@ impl crate::R3Client {
                 .map_err(UploadFileError::ParseJson)?;
             Ok(file_upload_response)
         } else {
-            let response: ErrorResponse = response
-                .json()
-                .await
-                .map_err(UploadFileError::ParseJson)?;
+            let response: ErrorResponse =
+                response.json().await.map_err(UploadFileError::ParseJson)?;
             Err(UploadFileError::ApiError(response))
         }
     }

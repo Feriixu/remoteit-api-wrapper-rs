@@ -5,8 +5,13 @@
 //! Please see [`R3Client`] for the actual functions you can call.
 
 use crate::auth::{build_auth_header, get_date};
-use crate::operations::{cancel_job, delete_file, delete_file_version, get_application_types, get_devices, get_files, get_jobs, get_owned_organization, start_job, CancelJob, DeleteFile, DeleteFileVersion, DeviceState, GetApplicationTypes, GetDevices, GetFiles, GetJobs, GetOwnedOrganization, StartJob};
-use crate::{R3Client, BASE_URL, GRAPHQL_PATH};
+use crate::operations::{
+    CancelJob, DeleteFile, DeleteFileVersion, DeviceState, GetApplicationTypes, GetDevices,
+    GetFiles, GetJobs, GetOwnedOrganization, StartJob, cancel_job, delete_file,
+    delete_file_version, get_application_types, get_devices, get_files, get_jobs,
+    get_owned_organization, start_job,
+};
+use crate::{BASE_URL, GRAPHQL_PATH, R3Client};
 use bon::bon;
 use graphql_client::{GraphQLQuery, QueryBody, Response};
 use reqwest::Client;
@@ -191,7 +196,7 @@ impl R3Client {
         /// Optional offset for the devices. Useful for pagination.
         offset: Option<i64>,
         /// Optional state to filter by.
-        state: Option<DeviceState>
+        state: Option<DeviceState>,
     ) -> Result<Response<get_devices::ResponseData>, Box<dyn Error>> {
         let request_body = GetDevices::build_query(get_devices::Variables {
             org_id,

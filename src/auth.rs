@@ -1,8 +1,8 @@
 //! Contains functions related to request signing for the remote.it API.
 //! They are used by this lib, but you can also use them to implement your own abstraction.
 
-use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use base64::Engine;
+use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use bon::builder;
 use chrono::Utc;
 use reqwest::Method;
@@ -62,16 +62,16 @@ pub fn build_auth_header(
     path: &str,
     date: &str,
 ) -> String {
-    let signature_params =
-        format!(
-            "(request-target): {} {path}\nhost: api.remote.it\ndate: {date}\ncontent-type: {content_type}",
-            method.to_string().to_lowercase()
-        );
+    let signature_params = format!(
+        "(request-target): {} {path}\nhost: api.remote.it\ndate: {date}\ncontent-type: {content_type}",
+        method.to_string().to_lowercase()
+    );
     #[cfg(debug_assertions)]
     dbg!(&signature_params);
     let signature = create_signature(key, &signature_params);
     format!(
-        "Signature keyId=\"{key_id}\",algorithm=\"hmac-sha256\",headers=\"(request-target) host date content-type\",signature=\"{signature}\"")
+        "Signature keyId=\"{key_id}\",algorithm=\"hmac-sha256\",headers=\"(request-target) host date content-type\",signature=\"{signature}\""
+    )
 }
 
 /// You probably don't want to use this function directly, unless you are implementing your own abstraction for making requests to the remote.it API.
