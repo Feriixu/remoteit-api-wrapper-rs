@@ -62,7 +62,7 @@ serde_json = "1.0.125"
 graphql_client = "0.14.0"
 tokio = { version = "1.39.3", optional = true, default-features = false, features = ["fs"] }
 tokio-util = { version = "0.7.11", optional = true, default-features = false, features = ["codec"]}
-reqwest = { version = "0.12.7", features = ["json", "http2", "default-tls"], default-features = false, optional = true}
+reqwest = { version = "0.13.4", features = ["json", "http2", "default-tls"], default-features = false, optional = true}
 config = { version = "0.15.11", features = ["ini"], optional = true, default-features = false }
 dirs = { version = "6.0.0", optional = true }
 
