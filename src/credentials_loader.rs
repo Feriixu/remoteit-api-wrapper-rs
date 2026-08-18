@@ -27,7 +27,9 @@ pub enum CredentialsLoaderError {
     Debug, Clone, PartialOrd, PartialEq, Eq, Ord, Hash, serde::Deserialize, serde::Serialize,
 )]
 pub(crate) struct UnverifiedCredentials {
+    #[serde(alias = "R3_ACCESS_KEY_ID")]
     pub(crate) r3_access_key_id: String,
+    #[serde(alias = "R3_SECRET_ACCESS_KEY")]
     pub(crate) r3_secret_access_key: String,
 }
 
@@ -41,8 +43,8 @@ pub(crate) struct UnverifiedCredentials {
 /// - [`CredentialProfiles::take_profile`]
 /// - [`CredentialProfiles::profile`]
 #[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
+#[serde(transparent)]
 pub struct CredentialProfiles {
-    #[serde(flatten)]
     pub(crate) profiles: HashMap<String, UnverifiedCredentials>,
 }
 
@@ -100,7 +102,7 @@ impl CredentialProfiles {
     }
 }
 
-/// Impl block for credentials_loader related functions.
+/// Impl block for `credentials_loader` related functions.
 #[bon]
 impl Credentials {
     /// Attempts to load the remote.it credentials from the user's home directory.

@@ -19,11 +19,14 @@ use bon::bon;
 ///     .build();
 /// ```
 /// If you enable the `credentials_loader` feature, you can also load the credentials from the default, or a custom file:
-/// ```
-/// # use std::path::PathBuf;
-/// # use remoteit_api::Credentials;
+/// ```no_run
+/// # #[cfg(feature = "credentials_loader")]
+/// # {
+/// use std::path::PathBuf;
+/// use remoteit_api::Credentials;
 /// let creds_from_default_loc = Credentials::load_from_disk().call().unwrap();
 /// let creds_from_custom_loc = Credentials::load_from_disk().custom_credentials_path(PathBuf::from(".env.remoteit")).call().unwrap();
+/// # }
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize)]
 pub struct Credentials {
@@ -69,14 +72,14 @@ impl Credentials {
     }
 
     /// # Returns
-    /// A reference to the r3_access_key_id
+    /// A reference to the `r3_access_key_id`.
     #[allow(clippy::must_use_candidate)]
     pub fn access_key_id(&self) -> &str {
         &self.r3_access_key_id
     }
 
     /// # Returns
-    /// The base64 encoded r3_secret_access_key
+    /// The base64 encoded `r3_secret_access_key`.
     #[allow(clippy::must_use_candidate)]
     pub fn secret_access_key(&self) -> &str {
         &self.r3_secret_access_key

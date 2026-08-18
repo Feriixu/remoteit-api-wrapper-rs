@@ -4,7 +4,7 @@
 //!
 //! Please see [`R3Client`](crate::R3Client) for the actual functions you can call.
 
-use bon::{Builder, bon, builder};
+use bon::{Builder, bon};
 use std::path::PathBuf;
 
 use crate::auth::{build_auth_header, get_date};

@@ -66,9 +66,10 @@ pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
 ///
 /// # Example
 /// You can create a new [`R3Client`] using the builder pattern:
-/// ```
-/// # use remoteit_api::R3Client;
-/// # use remoteit_api::Credentials;
+/// ```no_run
+/// # #[cfg(all(feature = "blocking", feature = "credentials_loader"))]
+/// # {
+/// use remoteit_api::{Credentials, R3Client};
 /// let credentials: Credentials = Credentials::load_from_disk()
 ///     .custom_credentials_path(".env.remoteit")
 ///     .call()
@@ -79,6 +80,7 @@ pub const FILE_UPLOAD_PATH: &str = "/graphql/v1/file/upload";
 /// let client = R3Client::builder().credentials(credentials).build();
 /// // Start making API calls
 /// let devices = client.get_devices().call().unwrap();
+/// # }
 /// ```
 #[derive(Builder, Clone, Debug)]
 pub struct R3Client {

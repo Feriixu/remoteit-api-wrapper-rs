@@ -4,8 +4,8 @@ use remoteit_api::R3Client;
 fn main() {
     // You can build the credentials manually like this.
     let _credentials = Credentials::builder()
-        .r3_access_key_id("access_key_id")
-        .r3_secret_access_key("secret_access_key")
+        .r3_access_key_id("access_key_id".to_owned())
+        .r3_secret_access_key("secret_access_key".to_owned())
         .build();
 
     // If the `credentials_loader` feature is enabled, the `load_from_disk` method is available.

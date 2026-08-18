@@ -1,5 +1,4 @@
-use remoteit_api::R3Client;
-use remoteit_api::credentials::Credentials;
+use remoteit_api::{Credentials, R3Client};
 
 fn main() {
     // See the `load_credentials` example for alternative ways to load credentials.
